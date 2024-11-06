@@ -17,13 +17,14 @@ import com.javakaian.network.messages.PositionMessage;
 import com.javakaian.network.messages.ShootMessage;
 import com.javakaian.shooter.shapes.Bullet;
 import com.javakaian.shooter.shapes.Enemy;
+import com.javakaian.shooter.shapes.BaseEnemy;
 import com.javakaian.shooter.shapes.Player;
 import com.javakaian.util.MessageCreator;
 
 public class ServerWorld implements OMessageListener {
 
 	private List<Player> players;
-	private List<Enemy> enemies;
+	private List<BaseEnemy> enemies;
 	private List<Bullet> bullets;
 
 	private OServer oServer;
@@ -78,12 +79,18 @@ public class ServerWorld implements OMessageListener {
 	 * lessthan 15.
 	 */
 	private void spawnRandomEnemy() {
+
 		if (enemyTime >= 0.4 && enemies.size() <= 15) {
 			enemyTime = 0;
 			if (enemies.size() % 5 == 0)
 				logger.debug("Number of enemies : " + enemies.size());
-			Enemy e = new Enemy(new SecureRandom().nextInt(1000), new SecureRandom().nextInt(1000), 10);
-			enemies.add(e);
+			BaseEnemy e = new Enemy(new SecureRandom().nextInt(1000), new SecureRandom().nextInt(1000), 10);
+			
+			
+			//can implement factory here.
+			BaseEnemy b = e.clone();
+			
+			enemies.add(b);
 		}
 	}
 
@@ -91,7 +98,7 @@ public class ServerWorld implements OMessageListener {
 
 		for (Bullet b : bullets) {
 
-			for (Enemy e : enemies) {
+			for (BaseEnemy e : enemies) {
 
 				if (b.isVisible() && e.getBoundRect().overlaps(b.getBoundRect())) {
 					b.setVisible(false);
