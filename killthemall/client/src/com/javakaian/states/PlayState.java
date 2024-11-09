@@ -151,19 +151,19 @@ public class PlayState extends State implements OMessageListener {
 
 		PositionMessage p = new PositionMessage();
 		p.setId(player.getId());
-		if (Gdx.input.isKeyPressed(Keys.S)) {
+		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) {
 			p.setDirection(DIRECTION.DOWN);
 			myclient.sendUDP(p);
 		}
-		if (Gdx.input.isKeyPressed(Keys.W)) {
+		if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
 			p.setDirection(DIRECTION.UP);
 			myclient.sendUDP(p);
 		}
-		if (Gdx.input.isKeyPressed(Keys.A)) {
+		if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)) {
 			p.setDirection(DIRECTION.LEFT);
 			myclient.sendUDP(p);
 		}
-		if (Gdx.input.isKeyPressed(Keys.D)) {
+		if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			p.setDirection(DIRECTION.RIGHT);
 			myclient.sendUDP(p);
 		}
