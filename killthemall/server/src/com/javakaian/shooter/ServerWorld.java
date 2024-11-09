@@ -3,18 +3,24 @@ package com.javakaian.shooter;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.javakaian.network.messages.*;
 import org.apache.log4j.Logger;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.javakaian.network.OServer;
+
 import com.javakaian.network.messages.GameWorldMessage;
 import com.javakaian.network.messages.LoginMessage;
 import com.javakaian.network.messages.LogoutMessage;
 import com.javakaian.network.messages.PlayerDied;
 import com.javakaian.network.messages.PositionMessage;
 import com.javakaian.network.messages.ShootMessage;
+
+import com.javakaian.shooter.shapes.Bullet;
+
 import com.javakaian.shooter.shapes.Enemy;
 import com.javakaian.shooter.shapes.HighDamageBullet;
 import com.javakaian.shooter.shapes.IBullet;
@@ -24,6 +30,7 @@ import com.javakaian.shooter.shapes.BaseWeapon;
 import com.javakaian.shooter.shapes.Player;
 import com.javakaian.shooter.shapes.RegularBullet;
 import com.javakaian.util.MessageCreator;
+import org.lwjgl.Sys;
 
 public class ServerWorld implements OMessageListener {
 
@@ -59,10 +66,15 @@ public class ServerWorld implements OMessageListener {
 
 		oServer.parseMessage();
 
+
+		broadcastScoreBoardUpdate();
+		//System.console().printf("Updated score");
+
 		// update every object
 		players.forEach(p -> p.update(deltaTime));
 		enemies.forEach(e -> e.update(deltaTime));
 		bullets.forEach(b -> b.update(deltaTime));
+		players.forEach(p -> p.setName());
 
 		checkCollision();
 
@@ -98,6 +110,13 @@ public class ServerWorld implements OMessageListener {
 		}
 	}
 
+	private void broadcastScoreBoardUpdate(){
+		Map<String, Integer> currentScores = Scoreboard.getInstance().getScores();
+
+		// Send the updated scores to all connected clients
+		oServer.sendToAllUDP(currentScores);
+	}
+
 	private void checkCollision() {
 
 		for (IBullet b : bullets) {
@@ -107,7 +126,17 @@ public class ServerWorld implements OMessageListener {
 				if (b.isVisible() && e.getBoundRect().overlaps(b.getBoundRect())) {
 					b.setVisible(false);
 					e.setVisible(false);
-					players.stream().filter(p -> p.getId() == b.getId()).findFirst().ifPresent(Player::increaseHealth);
+					players.stream()
+							.filter(p -> p.getId() == b.getId())
+							.findFirst()
+							.ifPresent(player -> {
+								player.increaseHealth();
+								player.increaseScore(5); // Increase score for hitting an enemy
+								Scoreboard.getInstance().updateScore(player.getName(), player.getScore());
+								ScoreUpdate scoreUpdate = new ScoreUpdate(player.getId(), player.getScore());
+								oServer.sendToAllUDP(scoreUpdate);
+							});
+
 				}
 			}
 			for (Player p : players) {
@@ -115,10 +144,24 @@ public class ServerWorld implements OMessageListener {
 					b.setVisible(false);
 					p.hit();
 					if (!p.isAlive()) {
-
+						// Notify all clients that the player died
 						PlayerDied m = new PlayerDied();
 						m.setId(p.getId());
 						oServer.sendToAllUDP(m);
+
+						// Find the player who shot the bullet and increase their score
+						players.stream()
+								.filter(player -> player.getId() == b.getId())
+								.findFirst()
+								.ifPresent(player ->{
+									player.increaseScore(20);
+									player.increaseHealth();
+									Scoreboard.getInstance().updateScore(player.getName(), player.getScore());
+									ScoreUpdate scoreUpdate = new ScoreUpdate(player.getId(), player.getScore());
+									oServer.sendToAllUDP(scoreUpdate);
+
+								}); // Award score for killing another player
+
 					}
 
 				}
@@ -135,8 +178,16 @@ public class ServerWorld implements OMessageListener {
 
 		BaseWeapon weapon = new Pistol(new HighDamageBullet());
 
-		players.add(new Player(m.getX(), m.getY(), 50, id, weapon));
-		logger.debug("Login Message recieved from : " + id);
+		//players.add(new Player(m.getX(), m.getY(), 50, id, weapon));
+		//logger.debug("Login Message recieved from : " + id);
+
+		Player newPlayer = new Player(m.getX(), m.getY(), 50, id, "Player_"+id, weapon);
+		players.add(newPlayer);
+		logger.debug("Login Message received from : "+ newPlayer.getName());
+		Scoreboard.getInstance().addPlayer(newPlayer.getName());
+		Scoreboard.getInstance().updateScore(newPlayer.getName(), newPlayer.getScore());
+
+
 		m.setId(id);
 		oServer.sendToUDP(con.getID(), m);
 	}
@@ -147,6 +198,8 @@ public class ServerWorld implements OMessageListener {
 		players.stream().filter(p -> p.getId() == m.getId()).findFirst().ifPresent(p -> {
 			players.remove(p);
 			loginController.putUserIDBack(p.getId());
+			Scoreboard.getInstance().removePlayer(p.getId());
+			broadcastScoreBoardUpdate();
 		});
 		logger.debug("Logout Message recieved from : " + m.getId() + " Size: " + players.size());
 

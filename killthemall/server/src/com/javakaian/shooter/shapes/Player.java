@@ -12,9 +12,15 @@ public class Player {
 	private Rectangle boundRect;
 	private boolean alive;
 	private int health;
+	private String name;
+	private int score;
+
 	private BaseWeapon weapon;
 
-	public Player(float x, float y, float size, int id, BaseWeapon weapon) {
+
+
+	public Player(float x, float y, float size, int id, String name, BaseWeapon weapon) {
+
 		this.position = new Vector2(x, y);
 		this.size = size;
 		this.id = id;
@@ -22,6 +28,7 @@ public class Player {
 		this.alive = true;
 		this.health = 100;
 		this.weapon = weapon;
+		this.score = 0;
 	}
 
 	public IBullet shoot(ShootMessage pp) {
@@ -34,6 +41,7 @@ public class Player {
 	}
 
 	public void update(float deltaTime) {
+
 
 		this.boundRect.x = position.x;
 		this.boundRect.y = position.y;
@@ -80,4 +88,23 @@ public class Player {
 		}
 	}
 
+	public String getName() {
+		return this.name;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setName() {
+		this.name = "Player " + this.id;
+	}
+
+	public void increaseScore(int points) {
+		this.score+=points;
+	}
+
+	public int getScore() {
+		return this.score;
+	}
 }

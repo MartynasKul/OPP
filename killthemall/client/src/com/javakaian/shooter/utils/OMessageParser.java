@@ -54,7 +54,7 @@ public class OMessageParser {
 			float y = tp[i * 4 + 1];
 			float id = tp[i * 4 + 2];
 			float health = tp[i * 4 + 3];
-			Player p = new Player(x, y, 50);
+			Player p = new Player(x, y, 50, "Player_"+id);
 			p.setHealth((int) health);
 			p.setId((int) id);
 

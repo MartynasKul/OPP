@@ -6,7 +6,7 @@ import java.util.Queue;
 public class LoginController {
 
 	private Queue<Integer> idSet;
-
+	//Scoreboard instance = Scoreboard.getInstance();
 	public LoginController() {
 
 		idSet = new LinkedList<>();

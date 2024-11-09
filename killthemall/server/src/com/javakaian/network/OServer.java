@@ -1,21 +1,18 @@
 package com.javakaian.network;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.javakaian.network.messages.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.javakaian.network.messages.GameWorldMessage;
-import com.javakaian.network.messages.LoginMessage;
-import com.javakaian.network.messages.LogoutMessage;
-import com.javakaian.network.messages.PlayerDied;
-import com.javakaian.network.messages.PositionMessage;
-import com.javakaian.network.messages.ShootMessage;
 import com.javakaian.shooter.OMessageListener;
 
 /**
@@ -135,8 +132,13 @@ public class OServer {
 		this.server.getKryo().register(PositionMessage.DIRECTION.class);
 		this.server.getKryo().register(ShootMessage.class);
 		this.server.getKryo().register(PlayerDied.class);
+		this.server.getKryo().register(ScoreUpdate.class);
 		// primitive arrays
 		this.server.getKryo().register(float[].class);
+		this.server.getKryo().register(HashMap.class);
+		this.server.getKryo().register(String.class);
+		this.server.getKryo().register(Integer.class);
+
 	}
 
 	public void sendToAllUDP(Object m) {

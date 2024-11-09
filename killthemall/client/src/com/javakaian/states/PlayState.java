@@ -21,10 +21,7 @@ import com.javakaian.network.messages.PositionMessage.DIRECTION;
 import com.javakaian.network.messages.ShootMessage;
 import com.javakaian.shooter.OMessageListener;
 import com.javakaian.shooter.input.PlayStateInput;
-import com.javakaian.shooter.shapes.AimLine;
-import com.javakaian.shooter.shapes.Bullet;
-import com.javakaian.shooter.shapes.Enemy;
-import com.javakaian.shooter.shapes.Player;
+import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.utils.GameConstants;
 import com.javakaian.shooter.utils.GameUtils;
 import com.javakaian.shooter.utils.OMessageParser;
@@ -173,25 +170,28 @@ public class PlayState extends State implements OMessageListener {
 	@Override
 	public void loginReceieved(LoginMessage m) {
 
-		player = new Player(m.getX(), m.getY(), 50);
+		player = new Player(m.getX(), m.getY(), 50, "Player_");
 		player.setId(m.getId());
+		player.setName("Player_"+player.getId());
 	}
 
 	@Override
 	public void logoutReceieved(LogoutMessage m) {
 		// do the logout proccess here
+		Scoreboard.getInstance().removePlayer(player.getId());
 	}
 
 	@Override
 	public void playerDiedReceived(PlayerDied m) {
 		if (player.getId() != m.getId())
 			return;
-
+		Scoreboard.getInstance().removePlayer(player.getId());
 		LogoutMessage mm = new LogoutMessage();
 		mm.setId(player.getId());
 		myclient.sendTCP(mm);
 		myclient.close();
 		this.getSc().setState(StateEnum.GAME_OVER_STATE);
+
 
 	}
 

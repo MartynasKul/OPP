@@ -11,6 +11,7 @@ public class LoginMessage {
 
 	/** Player id */
 	private int id;
+
 	/** Players current X,Y coordinates */
 	private float x;
 	private float y;
@@ -18,7 +19,6 @@ public class LoginMessage {
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -2,7 +2,12 @@ package com.javakaian.network;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.javakaian.network.messages.*;
+import com.javakaian.shooter.shapes.Scoreboard;
+import com.javakaian.shooter.utils.ScoreboardRenderer;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -10,20 +15,17 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.javakaian.network.messages.GameWorldMessage;
-import com.javakaian.network.messages.LoginMessage;
-import com.javakaian.network.messages.LogoutMessage;
-import com.javakaian.network.messages.PlayerDied;
-import com.javakaian.network.messages.PositionMessage;
-import com.javakaian.network.messages.ShootMessage;
 import com.javakaian.shooter.OMessageListener;
 
 public class OClient {
 
 	private Client client;
+
 	private OMessageListener game;
 
 	private String inetAddress;
+
+	private ScoreboardRenderer scoreboardRenderer;
 
 	private Logger logger = Logger.getLogger(OClient.class);
 
@@ -32,6 +34,7 @@ public class OClient {
 		this.game = game;
 		this.inetAddress = inetAddress;
 		client = new Client();
+		scoreboardRenderer = new ScoreboardRenderer();
 		registerClasses();
 		addListeners();
 
@@ -71,7 +74,17 @@ public class OClient {
 
 						PlayerDied m = (PlayerDied) object;
 						OClient.this.game.playerDiedReceived(m);
+					} else if (object instanceof Map) {
+						Map<String, Integer> playerScores = (Map<String, Integer>) object;
+						scoreboardRenderer.updateScores(playerScores);
+						Scoreboard.getInstance().updateScores(playerScores);
 					}
+					//else if (object instanceof ScoreUpdate){
+					//	ScoreUpdate m = (ScoreUpdate) object;
+//
+						//client.updateScoreData(scoreUpdate.playerId, scoreUpdate.newScore);
+
+					//}
 
 				});
 
@@ -93,8 +106,12 @@ public class OClient {
 		this.client.getKryo().register(PositionMessage.DIRECTION.class);
 		this.client.getKryo().register(ShootMessage.class);
 		this.client.getKryo().register(PlayerDied.class);
+		this.client.getKryo().register(ScoreUpdate.class);
 		// primitive arrays
 		this.client.getKryo().register(float[].class);
+		this.client.getKryo().register(HashMap.class);
+		this.client.getKryo().register(String.class);
+		this.client.getKryo().register(Integer.class);
 
 	}
 
