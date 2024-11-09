@@ -4,8 +4,7 @@ import java.util.List;
 
 import com.javakaian.network.messages.GameWorldMessage;
 import com.javakaian.shooter.shapes.BaseEnemy;
-import com.javakaian.shooter.shapes.Bullet;
-import com.javakaian.shooter.shapes.Enemy;
+import com.javakaian.shooter.shapes.IBullet;
 import com.javakaian.shooter.shapes.Player;
 
 public class MessageCreator {
@@ -21,7 +20,7 @@ public class MessageCreator {
 	 * Every objects in server like Enemies,Players,Bullets will be converted to the
 	 * float arrays and broadcasted.
 	 */
-	public static GameWorldMessage generateGWMMessage(List<BaseEnemy> enemies, List<Bullet> bullets, List<Player> players) {
+	public static GameWorldMessage generateGWMMessage(List<BaseEnemy> enemies, List<IBullet> bullets, List<Player> players) {
 
 		GameWorldMessage gwm = new GameWorldMessage();
 		float[] coordinates = new float[enemies.size() * 2];

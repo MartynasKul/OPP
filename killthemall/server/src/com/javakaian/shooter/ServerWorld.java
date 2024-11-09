@@ -15,17 +15,21 @@ import com.javakaian.network.messages.LogoutMessage;
 import com.javakaian.network.messages.PlayerDied;
 import com.javakaian.network.messages.PositionMessage;
 import com.javakaian.network.messages.ShootMessage;
-import com.javakaian.shooter.shapes.Bullet;
 import com.javakaian.shooter.shapes.Enemy;
+import com.javakaian.shooter.shapes.HighDamageBullet;
+import com.javakaian.shooter.shapes.IBullet;
+import com.javakaian.shooter.shapes.Pistol;
 import com.javakaian.shooter.shapes.BaseEnemy;
+import com.javakaian.shooter.shapes.BaseWeapon;
 import com.javakaian.shooter.shapes.Player;
+import com.javakaian.shooter.shapes.RegularBullet;
 import com.javakaian.util.MessageCreator;
 
 public class ServerWorld implements OMessageListener {
 
 	private List<Player> players;
 	private List<BaseEnemy> enemies;
-	private List<Bullet> bullets;
+	private List<IBullet> bullets;
 
 	private OServer oServer;
 
@@ -96,7 +100,7 @@ public class ServerWorld implements OMessageListener {
 
 	private void checkCollision() {
 
-		for (Bullet b : bullets) {
+		for (IBullet b : bullets) {
 
 			for (BaseEnemy e : enemies) {
 
@@ -128,7 +132,10 @@ public class ServerWorld implements OMessageListener {
 	public void loginReceived(Connection con, LoginMessage m) {
 
 		int id = loginController.getUserID();
-		players.add(new Player(m.getX(), m.getY(), 50, id));
+
+		BaseWeapon weapon = new Pistol(new HighDamageBullet());
+
+		players.add(new Player(m.getX(), m.getY(), 50, id, weapon));
 		logger.debug("Login Message recieved from : " + id);
 		m.setId(id);
 		oServer.sendToUDP(con.getID(), m);
@@ -176,9 +183,7 @@ public class ServerWorld implements OMessageListener {
 	public void shootMessageReceived(ShootMessage pp) {
 
 		players.stream().filter(p -> p.getId() == pp.getId()).findFirst()
-				.ifPresent(p -> bullets.add(new Bullet(p.getPosition().x + p.getBoundRect().width / 2,
-						p.getPosition().y + p.getBoundRect().height / 2, 10, pp.getAngleDeg(), pp.getId())));
-
+				.ifPresent(p -> bullets.add(p.shoot(pp)));
 	}
 
 }

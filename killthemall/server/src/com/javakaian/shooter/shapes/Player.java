@@ -2,6 +2,7 @@ package com.javakaian.shooter.shapes;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.javakaian.network.messages.ShootMessage;
 
 public class Player {
 
@@ -11,15 +12,25 @@ public class Player {
 	private Rectangle boundRect;
 	private boolean alive;
 	private int health;
+	private BaseWeapon weapon;
 
-	public Player(float x, float y, float size, int id) {
+	public Player(float x, float y, float size, int id, BaseWeapon weapon) {
 		this.position = new Vector2(x, y);
 		this.size = size;
 		this.id = id;
 		this.boundRect = new Rectangle(x, y, this.size, this.size);
 		this.alive = true;
 		this.health = 100;
+		this.weapon = weapon;
+	}
 
+	public IBullet shoot(ShootMessage pp) {
+		IBullet bullet = weapon.bullet.clone();
+		
+		bullet.setParameters(getPosition().x + getBoundRect().width / 2,
+		getPosition().y + getBoundRect().height / 2, 10, pp.getAngleDeg(), pp.getId());
+
+		return bullet;
 	}
 
 	public void update(float deltaTime) {
@@ -63,7 +74,7 @@ public class Player {
 	}
 
 	public void hit() {
-		this.health -= 10;
+		this.health -= weapon.bullet.getDamage();
 		if (this.health <= 0) {
 			this.alive = false;
 		}
