@@ -10,14 +10,18 @@ public class Player {
 	private Vector2 position;
 	private int id = -1;
 	private int health;
+	private String name;
+	private int score;
 
 	private Vector2 center;
 
-	public Player(float x, float y, float size) {
+	public Player(float x, float y, float size, String name) {
 		this.position = new Vector2(x, y);
 		this.size = size;
 		this.health = 100;
 		center = new Vector2(x, y);
+		this.name = name;
+		this.score=0;
 	}
 
 	public void render(ShapeRenderer sr) {
@@ -58,6 +62,21 @@ public class Player {
 
 	public void setHealth(int health) {
 		this.health = health;
+	}
+
+	public int getScore(){
+		return this.score;
+	}
+	public void setScore(int score){
+		this.score = score;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
