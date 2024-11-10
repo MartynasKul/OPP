@@ -44,6 +44,8 @@ public class PlayState extends State implements OMessageListener {
 
 	private BitmapFont healthFont;
 
+	private SoundPlayer soundPlayer;
+
 	public PlayState(StateController sc) {
 		super(sc);
 
@@ -53,6 +55,10 @@ public class PlayState extends State implements OMessageListener {
 	}
 
 	private void init() {
+
+		ISoundPlayer soundAdapter = new SoundAdapter();
+		soundPlayer = new SoundPlayer();
+		soundPlayer.setPlayer(soundAdapter);
 
 		myclient = new OClient(sc.getInetAddress(), this);
 		myclient.connect();
@@ -137,7 +143,7 @@ public class PlayState extends State implements OMessageListener {
 		m.setId(player.getId());
 		m.setAngleDeg(aimLine.getAngle());
 		myclient.sendUDP(m);
-
+		soundPlayer.playSound("client/assets/sounds/bulletShoot.wav");
 	}
 
 	/**
