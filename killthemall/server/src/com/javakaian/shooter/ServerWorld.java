@@ -112,7 +112,7 @@ public class ServerWorld implements OMessageListener {
 
 	private void broadcastScoreBoardUpdate(){
 		Map<String, Integer> currentScores = Scoreboard.getInstance().getScores();
-
+		
 		// Send the updated scores to all connected clients
 		oServer.sendToAllUDP(currentScores);
 	}
