@@ -23,6 +23,7 @@ public class MessageCreator {
 	public static GameWorldMessage generateGWMMessage(List<BaseEnemy> enemies, List<IBullet> bullets, List<Player> players) {
 
 		GameWorldMessage gwm = new GameWorldMessage();
+		//nebenaudojamas
 		float[] coordinates = new float[enemies.size() * 2];
 
 		for (int i = 0; i < enemies.size(); i++) {
@@ -30,7 +31,7 @@ public class MessageCreator {
 			coordinates[i * 2 + 1] = enemies.get(i).getY();
 		}
 
-		gwm.setEnemies(coordinates);
+		gwm.setEnemies(enemies);
 
 		float[] pcord = new float[players.size() * 4];
 		for (int i = 0; i < players.size(); i++) {

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.javakaian.network.messages.*;
+import com.javakaian.util.EnemyData;
+import com.javakaian.util.EnemyFactory;
 import org.apache.log4j.Logger;
 
 import com.badlogic.gdx.math.Vector2;
@@ -21,13 +23,14 @@ import com.javakaian.network.messages.ShootMessage;
 
 import com.javakaian.shooter.shapes.Bullet;
 
-import com.javakaian.shooter.shapes.Enemy;
+//import com.javakaian.shooter.shapes.Enemy;
 import com.javakaian.shooter.shapes.HighDamageBullet;
 import com.javakaian.shooter.shapes.IBullet;
 import com.javakaian.shooter.shapes.Pistol;
 import com.javakaian.shooter.shapes.BaseEnemy;
 import com.javakaian.shooter.shapes.BaseWeapon;
 import com.javakaian.shooter.shapes.Player;
+import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.shapes.RegularBullet;
 import com.javakaian.util.MessageCreator;
 import org.lwjgl.Sys;
@@ -96,17 +99,30 @@ public class ServerWorld implements OMessageListener {
 	 */
 	private void spawnRandomEnemy() {
 
-		if (enemyTime >= 0.4 && enemies.size() <= 15) {
+		if (enemyTime >= 0.4 && enemies.size() <= 30) {
 			enemyTime = 0;
 			if (enemies.size() % 5 == 0)
 				logger.debug("Number of enemies : " + enemies.size());
-			BaseEnemy e = new Enemy(new SecureRandom().nextInt(1000), new SecureRandom().nextInt(1000), 10);
-			
-			
+
+			float x = new SecureRandom().nextInt(1000);
+			float y = new SecureRandom().nextInt(1000);
+			//BaseEnemy e = new Enemy(new SecureRandom().nextInt(1000), new SecureRandom().nextInt(1000), 10);
+
+			BaseEnemy randomEnemy = EnemyFactory.createRandomEnemy(x,y);
+
+			BaseEnemy clonedEnemy = randomEnemy.clone();
 			//can implement factory here.
-			BaseEnemy b = e.clone();
-			
-			enemies.add(b);
+			//BaseEnemy b = e.clone();
+
+
+			EnemyData enemyData = new EnemyData(
+					clonedEnemy.getShape(),
+					clonedEnemy.getX(),
+					clonedEnemy.getY(),
+					clonedEnemy.getHealth()
+			);
+			oServer.sendToAllUDP(enemyData);
+			enemies.add(clonedEnemy);
 		}
 	}
 

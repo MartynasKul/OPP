@@ -1,5 +1,10 @@
 package com.javakaian.network.messages;
 
+import com.javakaian.shooter.shapes.BaseEnemy;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  * This message will be broadcast to all clients 60 times per second. It
@@ -11,7 +16,7 @@ package com.javakaian.network.messages;
 public class GameWorldMessage {
 
 	/** X,Y Coordinates of all the enemies.-> x1,y1,x2,y2,x3,y3.. */
-	private float[] enemies;
+	private List<BaseEnemy> enemies = new ArrayList<>();
 	/**
 	 * X,Y,ID,Health of all the players.->
 	 * x1,y1,ID1,Health1,x2,y2,ID2,Health2,x3,y3,ID3,Health3..
@@ -20,12 +25,12 @@ public class GameWorldMessage {
 	/** X,Y,Size of all the bullets.-> x1,y1,s1,x2,y2,s2,x3,y3,s3.. */
 	private float[] bullets;
 
-	public float[] getEnemies() {
+	public List<BaseEnemy> getEnemies() {
 		return enemies;
 	}
 
-	public void setEnemies(float[] enemies) {
-		this.enemies = enemies;
+	public void setEnemies(List<BaseEnemy> enemies) {
+        this.enemies.addAll(enemies);
 	}
 
 	public float[] getPlayers() {

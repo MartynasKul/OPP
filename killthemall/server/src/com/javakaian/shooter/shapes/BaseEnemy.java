@@ -6,13 +6,28 @@ public abstract class BaseEnemy implements Cloneable {
 
 	protected float x;
 	protected float y;
+	protected int health;
+
 	protected boolean visible = true;
+	protected String shape;
 	protected Rectangle boundRect;
 
+	public BaseEnemy(){}
 	public BaseEnemy(float x, float y, float size) {
 		this.x = x;
 		this.y = y;
-		this.boundRect = new Rectangle(x, y, size, size);
+		//this.boundRect = new Rectangle(x, y, size, size);
+	}
+	public BaseEnemy(float x, float y,  String shape, int health, int sizeX, int sizeY) {
+		this.x = x;
+		this.y = y;
+		this.shape = shape;
+		this.health = health;
+		this.boundRect = new Rectangle(x, y, sizeX, sizeY);
+	}
+
+	public Rectangle getBoundRect() {
+		return boundRect;
 	}
 
 	public void update(float deltaTime) {
@@ -37,17 +52,28 @@ public abstract class BaseEnemy implements Cloneable {
 		return y;
 	}
 
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
 	public boolean isVisible() {
 		return visible;
 	}
 
+	public String getShape() {
+		return shape;
+	}
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
 
-	public Rectangle getBoundRect() {
-		return boundRect;
-	}
+	//public Rectangle getBoundRect() {
+	//	return boundRect;
+	//}
 
     @Override
     public BaseEnemy clone() {
@@ -58,4 +84,7 @@ public abstract class BaseEnemy implements Cloneable {
             return null;
         }
     }
+
+	public abstract void takeDamage(int damage);
+	public abstract void applyEffect(Player player);
 }
