@@ -1,14 +1,19 @@
 package com.javakaian.network;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Rectangle;
 import com.javakaian.network.messages.*;
+import com.javakaian.shooter.shapes.CircleEnemy;
+import com.javakaian.shooter.shapes.EllipseEnemy;
+import com.javakaian.shooter.shapes.SquareEnemy;
+import com.javakaian.util.EnemyData;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import com.javakaian.network.*;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -136,8 +141,19 @@ public class OServer {
 		// primitive arrays
 		this.server.getKryo().register(float[].class);
 		this.server.getKryo().register(HashMap.class);
+		this.server.getKryo().register(Map.class);
 		this.server.getKryo().register(String.class);
 		this.server.getKryo().register(Integer.class);
+		this.server.getKryo().register(EnemyData.class);
+		this.server.getKryo().register(ArrayList.class);
+		this.server.getKryo().register(List.class);
+		this.server.getKryo().register(SquareEnemy.class);
+		this.server.getKryo().register(CircleEnemy.class);
+		this.server.getKryo().register(EllipseEnemy.class);
+		this.server.getKryo().register(Rectangle.class);
+		this.server.getKryo().register(Circle.class);
+		this.server.getKryo().register(Ellipse.class);
+
 
 	}
 

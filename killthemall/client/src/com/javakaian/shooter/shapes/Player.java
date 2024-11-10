@@ -79,4 +79,12 @@ public class Player {
 		this.name = name;
 	}
 
+	public void increaseScore(int score) {
+		this.score+=score;
+	}
+
+	public void increaseHealth(int health) {
+		this.health+=health;
+	}
+
 }

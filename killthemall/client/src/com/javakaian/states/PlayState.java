@@ -36,7 +36,7 @@ public class PlayState extends State implements OMessageListener {
 
 	private Player player;
 	private List<Player> players;
-	private List<Enemy> enemies;
+	private List<BaseEnemy> enemies;
 	private List<Bullet> bullets;
 	private AimLine aimLine;
 
