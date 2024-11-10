@@ -1,12 +1,20 @@
 package com.javakaian.network;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Rectangle;
 import com.javakaian.network.messages.*;
-import com.javakaian.shooter.shapes.Scoreboard;
+import com.javakaian.shooter.shapes.*;
+import com.javakaian.shooter.utils.EnemyData;
+import com.javakaian.shooter.utils.EnemyFactory;
 import com.javakaian.shooter.utils.ScoreboardRenderer;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -78,7 +86,17 @@ public class OClient {
 						Map<String, Integer> playerScores = (Map<String, Integer>) object;
 						scoreboardRenderer.updateScores(playerScores);
 						Scoreboard.getInstance().updateScores(playerScores);
+					} else if (object instanceof EnemyData) {
+						EnemyData data = (EnemyData) object;
+
+						BaseEnemy enemy = EnemyFactory.createEnemy(data.Type, data.x, data.y);
+						enemy.setHealth(data.health);
+
+
+
+						//enemies
 					}
+
 					//else if (object instanceof ScoreUpdate){
 					//	ScoreUpdate m = (ScoreUpdate) object;
 //
@@ -110,8 +128,18 @@ public class OClient {
 		// primitive arrays
 		this.client.getKryo().register(float[].class);
 		this.client.getKryo().register(HashMap.class);
+		this.client.getKryo().register(Map.class);
 		this.client.getKryo().register(String.class);
 		this.client.getKryo().register(Integer.class);
+		this.client.getKryo().register(EnemyData.class);
+		this.client.getKryo().register(ArrayList.class);
+		this.client.getKryo().register(List.class);
+		this.client.getKryo().register(SquareEnemy.class);
+		this.client.getKryo().register(CircleEnemy.class);
+		this.client.getKryo().register(EllipseEnemy.class);
+		this.client.getKryo().register(Rectangle.class);
+		this.client.getKryo().register(Circle.class);
+		this.client.getKryo().register(Ellipse.class);
 
 	}
 
