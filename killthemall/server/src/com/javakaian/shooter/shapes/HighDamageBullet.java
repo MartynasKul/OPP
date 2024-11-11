@@ -60,6 +60,10 @@ public class HighDamageBullet implements IBullet{
 
 		return boundRect;
 	}
+	@Override
+	public float getAngle() {
+		return angle;
+	}
 
     @Override
     public void update(float deltaTime) {
