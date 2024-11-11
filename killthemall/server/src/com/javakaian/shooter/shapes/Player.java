@@ -41,14 +41,14 @@ public class Player {
 	}
 
 
-	boolean someConditionForHighDamage = true;
+	boolean someConditionForHighDamage = false;
 	public void update(float deltaTime) {
 
 		if(this.health <= 50){
-			someConditionForHighDamage = false;
+			someConditionForHighDamage = true;
 		}
 		else{
-			someConditionForHighDamage = true;
+			someConditionForHighDamage = false;
 		}
 
 
@@ -57,8 +57,8 @@ public class Player {
 
 
 		if (someConditionForHighDamage) {
-			this.weapon.bullet = new DamageDecorator(bullet, 10);
-		}gi
+			this.weapon.bullet = new DamageDecorator(bullet, 40);
+		}
 		else{
 			this.weapon.bullet = new HighDamageBullet();
 		}
