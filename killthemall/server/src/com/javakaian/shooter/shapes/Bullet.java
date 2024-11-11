@@ -80,4 +80,8 @@ public class Bullet {
 		return boundRect;
 	}
 
+	public float getAngle() {
+		return angle;
+	}
+
 }

@@ -86,6 +86,11 @@ public class RegularBullet implements IBullet {
     }
 
     @Override
+    public float getAngle() {
+        return angle;
+    }
+
+    @Override
     public IBullet clone() {
         RegularBullet clone = new RegularBullet();
         return clone;

@@ -33,15 +33,35 @@ public class Player {
 
 	public IBullet shoot(ShootMessage pp) {
 		IBullet bullet = weapon.bullet.clone();
-		
+
 		bullet.setParameters(getPosition().x + getBoundRect().width / 2,
-		getPosition().y + getBoundRect().height / 2, 10, pp.getAngleDeg(), pp.getId());
+				getPosition().y + getBoundRect().height / 2, 10, pp.getAngleDeg(), pp.getId());
 
 		return bullet;
 	}
 
+
+	boolean someConditionForHighDamage = true;
 	public void update(float deltaTime) {
 
+		if(this.health <= 50){
+			someConditionForHighDamage = false;
+		}
+		else{
+			someConditionForHighDamage = true;
+		}
+
+
+
+		IBullet bullet = weapon.bullet.clone();
+
+
+		if (someConditionForHighDamage) {
+			this.weapon.bullet = new DamageDecorator(bullet, 10);
+		}gi
+		else{
+			this.weapon.bullet = new HighDamageBullet();
+		}
 
 		this.boundRect.x = position.x;
 		this.boundRect.y = position.y;
@@ -78,7 +98,7 @@ public class Player {
 	public void increaseHealth() {
 		if (this.health == 100)
 			return;
-		this.health += 10;
+		this.health += 5;
 	}
 
 	public void increaseHealth(int health) {

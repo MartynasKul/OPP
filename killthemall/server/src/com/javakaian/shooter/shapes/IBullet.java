@@ -16,4 +16,5 @@ public interface IBullet {
 	abstract public int getId();
 	abstract public Rectangle getBoundRect();
     abstract public IBullet clone();
+	abstract public float getAngle();
 } 
