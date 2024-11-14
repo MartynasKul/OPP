@@ -12,7 +12,7 @@ import java.util.Map;
 public class ClientMain {
 
 	private static Logger logger = Logger.getLogger(ClientMain.class);
-	private Map<Integer, Integer> playerScores = new HashMap<>();
+	//private Map<Integer, Integer> playerScores = new HashMap<>();
 
 	public static void main(String[] arg) {
 
@@ -34,7 +34,7 @@ public class ClientMain {
 		new LwjglApplication(new KillThemAll(ip), config);
 	}
 
-	public void updateScoreData(int playerId, int newScore){
-		playerScores.put(playerId,newScore);
-	}
+	//public void updateScoreData(int playerId, int newScore){
+	//	playerScores.put(playerId,newScore);
+	//}
 }

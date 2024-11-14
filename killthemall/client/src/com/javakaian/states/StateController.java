@@ -91,6 +91,7 @@ public class StateController {
 		currentState.update(deltaTime);
 		renderer.updateFromScoreboard();
 
+
 	}
 
 	/**

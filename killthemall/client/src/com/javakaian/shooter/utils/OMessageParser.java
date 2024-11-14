@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.javakaian.network.messages.GameWorldMessage;
+import com.javakaian.shooter.Strategy.DesaturationStrategy;
+import com.javakaian.shooter.Strategy.GradientStrategy;
 import com.javakaian.shooter.shapes.BaseEnemy;
 import com.javakaian.shooter.shapes.Bullet;
 import com.javakaian.shooter.shapes.Enemy;
@@ -53,7 +55,7 @@ public class OMessageParser {
 			float y = tp[i * 4 + 1];
 			float id = tp[i * 4 + 2];
 			float health = tp[i * 4 + 3];
-			Player p = new Player(x, y, 50, "Player_"+id);
+			Player p = new Player(x, y, 50, "Player_"+id, new DesaturationStrategy());
 			p.setHealth((int) health);
 			p.setId((int) id);
 
