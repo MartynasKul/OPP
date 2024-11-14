@@ -96,9 +96,9 @@ public class ServerWorld implements OMessageListener {
 
 		spawnRandomEnemy();
 
+		Scoreboard.getInstance().update(players);
 
 		GameWorldMessage m = MessageCreator.generateGWMMessage(enemies, bullets, players ,MapColor);
-
 		oServer.sendToAllUDP(m);
 
 	}
