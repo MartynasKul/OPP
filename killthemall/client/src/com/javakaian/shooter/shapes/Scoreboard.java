@@ -3,6 +3,7 @@ package com.javakaian.shooter.shapes;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 // DEPRECATED CLASS

@@ -91,7 +91,10 @@ public class ServerWorld implements OMessageListener {
 		enemies.removeIf(e -> !e.isVisible());
 		bullets.removeIf(b -> !b.isVisible());
 
+
 		spawnRandomEnemy();
+
+		Scoreboard.getInstance().update(players);
 
 		GameWorldMessage m = MessageCreator.generateGWMMessage(enemies, bullets, players);
 		oServer.sendToAllUDP(m);
@@ -165,8 +168,11 @@ public class ServerWorld implements OMessageListener {
 					if (!p.isAlive()) {
 						// Notify all clients that the player died
 						PlayerDied m = new PlayerDied();
+
 						m.setId(p.getId());
+						Scoreboard.getInstance().removePlayer(m.getId());
 						oServer.sendToAllUDP(m);
+						oServer.sendToAllUDP(Scoreboard.getInstance().getScores());
 
 						// Find the player who shot the bullet and increase their score
 						players.stream()
@@ -177,7 +183,7 @@ public class ServerWorld implements OMessageListener {
 									player.increaseHealth();
 									Scoreboard.getInstance().updateScore(player.getName(), player.getScore());
 									ScoreUpdate scoreUpdate = new ScoreUpdate(player.getId(), player.getScore());
-									oServer.sendToAllUDP(scoreUpdate);
+									oServer.sendToAllUDP(Scoreboard.getInstance().getScores());
 
 								}); // Award score for killing another player
 					}

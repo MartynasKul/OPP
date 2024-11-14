@@ -194,7 +194,7 @@ public class PlayState extends State implements OMessageListener {
 	public void playerDiedReceived(PlayerDied m) {
 		if (player.getId() != m.getId())
 			return;
-		Scoreboard.getInstance().removePlayer(player.getId());
+		Scoreboard.getInstance().removePlayer(m.getId());
 		LogoutMessage mm = new LogoutMessage();
 		mm.setId(player.getId());
 		myclient.sendTCP(mm);
