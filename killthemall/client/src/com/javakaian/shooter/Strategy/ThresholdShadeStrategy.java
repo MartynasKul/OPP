@@ -1,8 +1,6 @@
 package com.javakaian.shooter.Strategy;
-
 import com.badlogic.gdx.graphics.Color;
 
-//GOOD WORK
 public class ThresholdShadeStrategy implements ColorStrategy {
     @Override
     public String applyColorString(int health){
