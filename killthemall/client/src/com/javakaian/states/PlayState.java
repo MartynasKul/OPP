@@ -43,6 +43,7 @@ public class PlayState extends State implements OMessageListener {
 	private List<Bullet> bullets;
 	private AimLine aimLine;
 	private int mapColor;
+	private EntityRenderingFactory renderingFactory;
 	private OClient myclient;
 
 	private BitmapFont healthFont;
@@ -55,6 +56,7 @@ public class PlayState extends State implements OMessageListener {
 		init();
 		ip = new PlayStateInput(this);
 		healthFont = GameUtils.generateBitmapFont(20, Color.WHITE);
+		this.renderingFactory = new AdvancedRenderingFactory();
 	}
 
 	private void init() {
@@ -87,14 +89,20 @@ public class PlayState extends State implements OMessageListener {
 		if (player == null)
 			return;
 
-		ScreenUtils.clear(0, 0, 0, 1);
+		if(mapColor == 1){
+			ScreenUtils.clear(1, 1, 0, 1); 
+
+		}
+		else if(mapColor == 2){
+			ScreenUtils.clear(0, 0, 0, 1);
+
+		}
 
 		sr.begin(ShapeType.Line);
 		sr.setColor(Color.RED);
 		players.forEach(p -> p.render(sr));
-		sr.setColor(Color.WHITE);
-		enemies.forEach(e -> e.render(sr));
-		bullets.forEach(b -> b.render(sr));
+		enemies.forEach(e -> {sr.setColor(renderingFactory.getEnemyColor(e)); e.render(sr);});
+		bullets.forEach(b ->{sr.setColor(renderingFactory.getBulletColor(b)); b.render(sr);});
 		sr.setColor(Color.BLUE);
 		player.render(sr);
 		sr.setColor(Color.WHITE);
