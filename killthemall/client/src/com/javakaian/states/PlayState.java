@@ -42,7 +42,7 @@ public class PlayState extends State implements OMessageListener {
 	private List<BaseEnemy> enemies;
 	private List<Bullet> bullets;
 	private AimLine aimLine;
-
+	private int mapColor;
 	private OClient myclient;
 
 	private BitmapFont healthFont;
@@ -211,7 +211,7 @@ public class PlayState extends State implements OMessageListener {
 		bullets = OMessageParser.getBulletsFromGWM(m);
 
 		players = OMessageParser.getPlayersFromGWM(m);
-
+		mapColor = OMessageParser.getMapFromGWM(m);
 		if (player == null)
 			return;
 		// Find yourself.

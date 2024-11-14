@@ -39,6 +39,9 @@ public class OMessageParser {
 		return elist;
 
 	}
+		public static int getMapFromGWM(GameWorldMessage m){
+		return m.getMapColor();
+	}
 
 	/**
 	 * Returns a player list from gameworld message. Including clients itself. Thats
