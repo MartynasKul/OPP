@@ -28,8 +28,6 @@ public class SpeedDecorator extends BulletDecorator {
         position.x += Math.cos(angle) * adjustedSpeed;
         position.y -= Math.sin(angle) * adjustedSpeed;
 
-        //wrappedBullet.boundRect.x = position.x;
-        //wrappedBullet.boundRect.y = position.y;
 
         wrappedBullet.setPosition(position);
     }

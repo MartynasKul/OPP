@@ -14,6 +14,8 @@ public class RegularBullet implements IBullet {
 	private int id;
 	private Rectangle boundRect;
 
+    private boolean piercing;
+
     @Override
     public int getDamage() {
         return 15;
@@ -95,4 +97,10 @@ public class RegularBullet implements IBullet {
         RegularBullet clone = new RegularBullet();
         return clone;
     }
+
+    @Override
+    public void setPiercing(boolean piercing){this.piercing=piercing;}
+
+    @Override
+    public boolean getPiercing(){return piercing;}
 }
