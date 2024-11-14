@@ -8,9 +8,7 @@ public class LoginController {
 	private Queue<Integer> idSet;
 	//Scoreboard instance = Scoreboard.getInstance();
 	public LoginController() {
-
 		idSet = new LinkedList<>();
-
 		// max 100 players allowed to play at the same time.
 		for (int i = 0; i < 100; i++) {
 			idSet.add(i + 1);
@@ -25,5 +23,4 @@ public class LoginController {
 	public void putUserIDBack(int id) {
 		idSet.add(id);
 	}
-
 }
