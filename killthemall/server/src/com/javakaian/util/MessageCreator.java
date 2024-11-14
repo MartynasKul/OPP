@@ -20,7 +20,7 @@ public class MessageCreator {
 	 * Every objects in server like Enemies,Players,Bullets will be converted to the
 	 * float arrays and broadcasted.
 	 */
-	public static GameWorldMessage generateGWMMessage(List<BaseEnemy> enemies, List<IBullet> bullets, List<Player> players) {
+	public static GameWorldMessage generateGWMMessage(List<BaseEnemy> enemies, List<IBullet> bullets, List<Player> players, int Mapcolor) {
 
 		GameWorldMessage gwm = new GameWorldMessage();
 		//nebenaudojamas
@@ -51,6 +51,7 @@ public class MessageCreator {
 			barray[i * 3 + 2] = bullets.get(i).getSize();
 		}
 		gwm.setBullets(barray);
+		gwm.setMapColor(Mapcolor);
 
 		return gwm;
 	}
