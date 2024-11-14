@@ -1,10 +1,6 @@
 package com.javakaian.shooter.Strategy;
-
-// GOOD WORK.
 import com.badlogic.gdx.graphics.Color;
-
 public class FadeToBlackStrategy implements ColorStrategy {
-
     @Override
     public String applyColorString(int health){
         if(health>50){

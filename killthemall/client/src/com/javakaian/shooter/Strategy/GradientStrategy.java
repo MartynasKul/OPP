@@ -3,7 +3,6 @@ import com.badlogic.gdx.graphics.Color;
 public class GradientStrategy implements ColorStrategy {
     @Override
     public String applyColorString(int health) {
-        // Gradually change from green (#00FF00) to red (#FF0000)
         int red = (int) (255 * (1 - (health / 100.0)));
         int green = (int) (255 * (health / 100.0));
         return String.format("#%02X%02X00", red, green); // Returns a hex color code

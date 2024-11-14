@@ -3,13 +3,9 @@ import com.badlogic.gdx.graphics.Color;
 public class GreenYellowRedStrategy implements ColorStrategy {
     @Override
     public String applyColorString(int health){
-        if (health > 70) {
-            return "Green";
-        } else if (health > 30) {
-            return "Yellow";
-        } else {
-            return "Red";
-        }
+        if (health > 70) {return "Green";}
+        else if (health > 30) { return "Yellow";}
+        else { return "Red";}
     }
 
     @Override
