@@ -27,11 +27,16 @@ import com.javakaian.shooter.shapes.Bullet;
 import com.javakaian.shooter.shapes.HighDamageBullet;
 import com.javakaian.shooter.shapes.IBullet;
 import com.javakaian.shooter.shapes.Pistol;
+import com.javakaian.shooter.shapes.MachineGun;
 import com.javakaian.shooter.shapes.BaseEnemy;
 import com.javakaian.shooter.shapes.BaseWeapon;
 import com.javakaian.shooter.shapes.Player;
 import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.shapes.RegularBullet;
+import com.javakaian.shooter.shapes.BulletDecorator;
+import com.javakaian.shooter.shapes.DamageDecorator;
+import com.javakaian.shooter.shapes.SpeedDecorator;
+import com.javakaian.shooter.shapes.PiercingDecorator;
 import com.javakaian.util.MessageCreator;
 import org.lwjgl.Sys;
 
@@ -136,7 +141,8 @@ public class ServerWorld implements OMessageListener {
 			for (BaseEnemy e : enemies) {
 
 				if (b.isVisible() && e.getBoundRect().overlaps(b.getBoundRect())) {
-					b.setVisible(false);
+					if(b.getPiercing()){ b.setVisible(true);}
+					else{b.setVisible(false);}
 					e.setVisible(false);
 					players.stream()
 							.filter(p -> p.getId() == b.getId())
@@ -153,7 +159,8 @@ public class ServerWorld implements OMessageListener {
 			}
 			for (Player p : players) {
 				if (b.isVisible() && p.getBoundRect().overlaps(b.getBoundRect()) && p.getId() != b.getId()) {
-					b.setVisible(false);
+					if(b.getPiercing()){ b.setVisible(true);}
+					else{b.setVisible(false);}
 					p.hit();
 					if (!p.isAlive()) {
 						// Notify all clients that the player died
@@ -237,10 +244,39 @@ public class ServerWorld implements OMessageListener {
 		});
 	}
 
+	private boolean shouldAddSpeedBoost(IBullet bullet) {
+		if(players.size()>1){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	private boolean shouldAddPiercing() {
+		if(players.size()>2){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+
 	@Override
 	public void shootMessageReceived(ShootMessage pp) {
-
 		players.stream().filter(p -> p.getId() == pp.getId()).findFirst()
-				.ifPresent(p -> bullets.add(p.shoot(pp)));
+				.ifPresent(p -> {
+					IBullet bullet = p.shoot(pp);
+
+					if (shouldAddSpeedBoost(bullet)) {
+						bullet = new SpeedDecorator(bullet, 1.5f);
+					}
+
+					if (shouldAddPiercing()){
+						bullet = new PiercingDecorator(bullet, true);
+					}
+
+					bullets.add(bullet);
+				});
 	}
 }

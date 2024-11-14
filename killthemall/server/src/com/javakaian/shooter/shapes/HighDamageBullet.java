@@ -10,6 +10,8 @@ public class HighDamageBullet implements IBullet{
 	private float angle;
 	private boolean visible = true;
 
+	private boolean piercing = false;
+
 	private float ttlCounter = 0;
 	private int id;
 	private Rectangle boundRect;
@@ -60,6 +62,10 @@ public class HighDamageBullet implements IBullet{
 
 		return boundRect;
 	}
+	@Override
+	public float getAngle() {
+		return angle;
+	}
 
     @Override
     public void update(float deltaTime) {
@@ -85,4 +91,10 @@ public class HighDamageBullet implements IBullet{
         HighDamageBullet clone = new HighDamageBullet();
         return clone;
     }
+
+	@Override
+	public void setPiercing(boolean piercing){this.piercing=piercing;}
+
+	@Override
+	public boolean getPiercing(){return piercing;}
 }

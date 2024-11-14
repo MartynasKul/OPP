@@ -12,7 +12,6 @@ public class Bullet {
 	private Vector2 position;
 	private float size;
 	private boolean visible = true;
-
 	public Bullet(float x, float y, float size) {
 		this.position = new Vector2(x, y);
 		this.size = size;
@@ -20,7 +19,6 @@ public class Bullet {
 
 	public void render(ShapeRenderer sr) {
 		sr.rect(position.x, position.y, size, size);
-
 	}
 
 	public Vector2 getPosition() {
