@@ -15,6 +15,8 @@ public class Bullet {
 	private float angle;
 	private boolean visible = true;
 
+	private boolean piercing = false;
+
 	private float ttlCounter = 0;
 	private int id;
 	private Rectangle boundRect;
@@ -78,6 +80,14 @@ public class Bullet {
 	public Rectangle getBoundRect() {
 
 		return boundRect;
+	}
+
+	public void setPiercing(boolean piercing){
+		this.piercing = piercing;
+	}
+
+	public boolean getPiercing(){
+		return piercing;
 	}
 
 	public float getAngle() {

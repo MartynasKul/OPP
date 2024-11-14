@@ -57,6 +57,12 @@ public abstract class BulletDecorator implements IBullet {
     }
 
     @Override
+    public void setPiercing(boolean piercing){wrappedBullet.setPiercing(piercing);}
+
+    @Override
+    public boolean getPiercing(){return wrappedBullet.getPiercing();}
+
+    @Override
     public int getId() {
         return wrappedBullet.getId();
     }

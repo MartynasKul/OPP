@@ -62,7 +62,6 @@ public class Player {
 		else{
 			this.weapon.bullet = new HighDamageBullet();
 		}
-
 		this.boundRect.x = position.x;
 		this.boundRect.y = position.y;
 	}
