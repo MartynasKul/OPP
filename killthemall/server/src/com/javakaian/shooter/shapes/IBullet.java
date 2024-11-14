@@ -16,4 +16,7 @@ public interface IBullet {
 	abstract public int getId();
 	abstract public Rectangle getBoundRect();
     abstract public IBullet clone();
+	abstract public void setPiercing(boolean piercing);
+	abstract public boolean getPiercing();
+	abstract public float getAngle();
 } 
