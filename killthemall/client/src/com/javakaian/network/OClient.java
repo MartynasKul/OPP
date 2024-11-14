@@ -1,6 +1,5 @@
 package com.javakaian.network;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import com.javakaian.network.messages.*;
 import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.utils.EnemyData;
 import com.javakaian.shooter.utils.EnemyFactory;
-import com.javakaian.shooter.utils.ScoreboardRenderer;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -26,15 +24,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.javakaian.shooter.OMessageListener;
 
 public class OClient {
-
 	private Client client;
-
 	private OMessageListener game;
-
 	private String inetAddress;
-
-	private ScoreboardRenderer scoreboardRenderer;
-
 	private Logger logger = Logger.getLogger(OClient.class);
 
 	public OClient(String inetAddress, OMessageListener game) {
@@ -42,7 +34,6 @@ public class OClient {
 		this.game = game;
 		this.inetAddress = inetAddress;
 		client = new Client();
-		scoreboardRenderer = new ScoreboardRenderer();
 		registerClasses();
 		addListeners();
 
@@ -84,30 +75,14 @@ public class OClient {
 						OClient.this.game.playerDiedReceived(m);
 					} else if (object instanceof Map) {
 						Map<String, Integer> playerScores = (Map<String, Integer>) object;
-						scoreboardRenderer.updateScores(playerScores);
 						Scoreboard.getInstance().updateScores(playerScores);
 					} else if (object instanceof EnemyData) {
 						EnemyData data = (EnemyData) object;
-
 						BaseEnemy enemy = EnemyFactory.createEnemy(data.Type, data.x, data.y);
 						enemy.setHealth(data.health);
-
-
-
-						//enemies
 					}
-
-					//else if (object instanceof ScoreUpdate){
-					//	ScoreUpdate m = (ScoreUpdate) object;
-//
-						//client.updateScoreData(scoreUpdate.playerId, scoreUpdate.newScore);
-
-					//}
-
 				});
-
 			}
-
 		});
 	}
 

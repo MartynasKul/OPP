@@ -106,14 +106,10 @@ public class ServerWorld implements OMessageListener {
 
 			float x = new SecureRandom().nextInt(1000);
 			float y = new SecureRandom().nextInt(1000);
-			//BaseEnemy e = new Enemy(new SecureRandom().nextInt(1000), new SecureRandom().nextInt(1000), 10);
 
 			BaseEnemy randomEnemy = EnemyFactory.createRandomEnemy(x,y);
 
 			BaseEnemy clonedEnemy = randomEnemy.clone();
-			//can implement factory here.
-			//BaseEnemy b = e.clone();
-
 
 			EnemyData enemyData = new EnemyData(
 					clonedEnemy.getShape(),
@@ -177,7 +173,6 @@ public class ServerWorld implements OMessageListener {
 									oServer.sendToAllUDP(scoreUpdate);
 
 								}); // Award score for killing another player
-
 					}
 
 				}
@@ -194,15 +189,11 @@ public class ServerWorld implements OMessageListener {
 
 		BaseWeapon weapon = new Pistol(new HighDamageBullet());
 
-		//players.add(new Player(m.getX(), m.getY(), 50, id, weapon));
-		//logger.debug("Login Message recieved from : " + id);
-
 		Player newPlayer = new Player(m.getX(), m.getY(), 50, id, "Player_"+id, weapon);
 		players.add(newPlayer);
 		logger.debug("Login Message received from : "+ newPlayer.getName());
 		Scoreboard.getInstance().addPlayer(newPlayer.getName());
 		Scoreboard.getInstance().updateScore(newPlayer.getName(), newPlayer.getScore());
-
 
 		m.setId(id);
 		oServer.sendToUDP(con.getID(), m);
@@ -212,13 +203,13 @@ public class ServerWorld implements OMessageListener {
 	public void logoutReceived(LogoutMessage m) {
 
 		players.stream().filter(p -> p.getId() == m.getId()).findFirst().ifPresent(p -> {
+			Scoreboard.getInstance().removePlayer(p.getId());
 			players.remove(p);
 			loginController.putUserIDBack(p.getId());
-			Scoreboard.getInstance().removePlayer(p.getId());
+
 			broadcastScoreBoardUpdate();
 		});
 		logger.debug("Logout Message recieved from : " + m.getId() + " Size: " + players.size());
-
 	}
 
 	@Override
@@ -243,9 +234,7 @@ public class ServerWorld implements OMessageListener {
 			default:
 				break;
 			}
-
 		});
-
 	}
 
 	@Override
@@ -254,5 +243,4 @@ public class ServerWorld implements OMessageListener {
 		players.stream().filter(p -> p.getId() == pp.getId()).findFirst()
 				.ifPresent(p -> bullets.add(p.shoot(pp)));
 	}
-
 }

@@ -20,6 +20,9 @@ import com.javakaian.network.messages.PositionMessage;
 import com.javakaian.network.messages.PositionMessage.DIRECTION;
 import com.javakaian.network.messages.ShootMessage;
 import com.javakaian.shooter.OMessageListener;
+import com.javakaian.shooter.Strategy.BlinkingRedStrategy;
+import com.javakaian.shooter.Strategy.DesaturationStrategy;
+import com.javakaian.shooter.Strategy.GradientStrategy;
 import com.javakaian.shooter.input.PlayStateInput;
 import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.utils.GameConstants;
@@ -176,7 +179,7 @@ public class PlayState extends State implements OMessageListener {
 	@Override
 	public void loginReceieved(LoginMessage m) {
 
-		player = new Player(m.getX(), m.getY(), 50, "Player_");
+		player = new Player(m.getX(), m.getY(), 50, "Player_", new DesaturationStrategy());
 		player.setId(m.getId());
 		player.setName("Player_"+player.getId());
 	}
@@ -215,6 +218,7 @@ public class PlayState extends State implements OMessageListener {
 		players.stream().filter(p -> p.getId() == player.getId()).findFirst().ifPresent(p -> player = p);
 		// Remove yourself from playerlist.
 		players.removeIf(p -> p.getId() == player.getId());
+
 
 	}
 

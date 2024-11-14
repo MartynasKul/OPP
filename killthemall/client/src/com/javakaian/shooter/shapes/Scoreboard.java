@@ -2,7 +2,6 @@ package com.javakaian.shooter.shapes;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,13 +57,16 @@ public class Scoreboard {
 
     // nenaudojamas
     public void render() {
+        if (playerScores == null) return; // Safety check, but ideally it should never be null here
+
         batch.begin();
-        font.draw(batch, "+++ Scoreboard +++", 850, 980); // Adjust Y position as needed
-        int yOffset = 960; // Start a bit below the title
+        font.draw(batch, "-----Scoreboard-----", 850, 980);
+        int yOffset = 960;
+
 
         for (Map.Entry<String, Integer> entry : playerScores.entrySet()) {
             font.draw(batch, entry.getKey() + ": " + entry.getValue(), 850, yOffset);
-            yOffset -= 20; // Move down for the next score entry
+            yOffset -= 20;
         }
 
         batch.end();
@@ -79,5 +81,6 @@ public class Scoreboard {
     public void removePlayer(int playerId) {
         String playerName = "Player_" + playerId;
         playerScores.remove(playerName);
+        render();
     }
 }
