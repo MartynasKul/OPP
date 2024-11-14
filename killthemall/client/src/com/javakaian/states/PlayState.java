@@ -20,6 +20,9 @@ import com.javakaian.network.messages.PositionMessage;
 import com.javakaian.network.messages.PositionMessage.DIRECTION;
 import com.javakaian.network.messages.ShootMessage;
 import com.javakaian.shooter.OMessageListener;
+import com.javakaian.shooter.Strategy.BlinkingRedStrategy;
+import com.javakaian.shooter.Strategy.DesaturationStrategy;
+import com.javakaian.shooter.Strategy.GradientStrategy;
 import com.javakaian.shooter.input.PlayStateInput;
 import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.utils.GameConstants;
@@ -36,13 +39,15 @@ public class PlayState extends State implements OMessageListener {
 
 	private Player player;
 	private List<Player> players;
-	private List<Enemy> enemies;
+	private List<BaseEnemy> enemies;
 	private List<Bullet> bullets;
 	private AimLine aimLine;
 
 	private OClient myclient;
 
 	private BitmapFont healthFont;
+
+	private SoundPlayer soundPlayer;
 
 	public PlayState(StateController sc) {
 		super(sc);
@@ -53,6 +58,10 @@ public class PlayState extends State implements OMessageListener {
 	}
 
 	private void init() {
+
+		ISoundPlayer soundAdapter = new SoundAdapter();
+		soundPlayer = new SoundPlayer();
+		soundPlayer.setPlayer(soundAdapter);
 
 		myclient = new OClient(sc.getInetAddress(), this);
 		myclient.connect();
@@ -137,7 +146,7 @@ public class PlayState extends State implements OMessageListener {
 		m.setId(player.getId());
 		m.setAngleDeg(aimLine.getAngle());
 		myclient.sendUDP(m);
-
+		soundPlayer.playSound("client/assets/sounds/bulletShoot.wav");
 	}
 
 	/**
@@ -170,7 +179,7 @@ public class PlayState extends State implements OMessageListener {
 	@Override
 	public void loginReceieved(LoginMessage m) {
 
-		player = new Player(m.getX(), m.getY(), 50, "Player_");
+		player = new Player(m.getX(), m.getY(), 50, "Player_", new DesaturationStrategy());
 		player.setId(m.getId());
 		player.setName("Player_"+player.getId());
 	}
@@ -209,6 +218,7 @@ public class PlayState extends State implements OMessageListener {
 		players.stream().filter(p -> p.getId() == player.getId()).findFirst().ifPresent(p -> player = p);
 		// Remove yourself from playerlist.
 		players.removeIf(p -> p.getId() == player.getId());
+
 
 	}
 

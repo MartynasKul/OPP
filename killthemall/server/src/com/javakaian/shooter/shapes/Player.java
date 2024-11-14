@@ -100,6 +100,12 @@ public class Player {
 		this.health += 5;
 	}
 
+	public void increaseHealth(int health) {
+		if (this.health == 100)
+			return;
+		this.health += health;
+	}
+
 	public void hit() {
 		this.health -= weapon.bullet.getDamage();
 		if (this.health <= 0) {

@@ -17,5 +17,4 @@ public class ServerMain {
 		/** Create server. */
 		new HeadlessApplication(new KillThemAllServer(), conf);
 	}
-
 }

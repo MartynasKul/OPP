@@ -2,12 +2,18 @@ package com.javakaian.network;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Rectangle;
 import com.javakaian.network.messages.*;
-import com.javakaian.shooter.shapes.Scoreboard;
-import com.javakaian.shooter.utils.ScoreboardRenderer;
+import com.javakaian.shooter.shapes.*;
+import com.javakaian.shooter.utils.EnemyData;
+import com.javakaian.shooter.utils.EnemyFactory;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -18,15 +24,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.javakaian.shooter.OMessageListener;
 
 public class OClient {
-
 	private Client client;
-
 	private OMessageListener game;
-
 	private String inetAddress;
-
-	private ScoreboardRenderer scoreboardRenderer;
-
 	private Logger logger = Logger.getLogger(OClient.class);
 
 	public OClient(String inetAddress, OMessageListener game) {
@@ -34,7 +34,6 @@ public class OClient {
 		this.game = game;
 		this.inetAddress = inetAddress;
 		client = new Client();
-		scoreboardRenderer = new ScoreboardRenderer();
 		registerClasses();
 		addListeners();
 
@@ -76,20 +75,14 @@ public class OClient {
 						OClient.this.game.playerDiedReceived(m);
 					} else if (object instanceof Map) {
 						Map<String, Integer> playerScores = (Map<String, Integer>) object;
-						scoreboardRenderer.updateScores(playerScores);
 						Scoreboard.getInstance().updateScores(playerScores);
+					} else if (object instanceof EnemyData) {
+						EnemyData data = (EnemyData) object;
+						BaseEnemy enemy = EnemyFactory.createEnemy(data.Type, data.x, data.y);
+						enemy.setHealth(data.health);
 					}
-					//else if (object instanceof ScoreUpdate){
-					//	ScoreUpdate m = (ScoreUpdate) object;
-//
-						//client.updateScoreData(scoreUpdate.playerId, scoreUpdate.newScore);
-
-					//}
-
 				});
-
 			}
-
 		});
 	}
 
@@ -110,8 +103,18 @@ public class OClient {
 		// primitive arrays
 		this.client.getKryo().register(float[].class);
 		this.client.getKryo().register(HashMap.class);
+		this.client.getKryo().register(Map.class);
 		this.client.getKryo().register(String.class);
 		this.client.getKryo().register(Integer.class);
+		this.client.getKryo().register(EnemyData.class);
+		this.client.getKryo().register(ArrayList.class);
+		this.client.getKryo().register(List.class);
+		this.client.getKryo().register(SquareEnemy.class);
+		this.client.getKryo().register(CircleEnemy.class);
+		this.client.getKryo().register(EllipseEnemy.class);
+		this.client.getKryo().register(Rectangle.class);
+		this.client.getKryo().register(Circle.class);
+		this.client.getKryo().register(Ellipse.class);
 
 	}
 

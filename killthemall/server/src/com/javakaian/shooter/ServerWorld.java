@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.javakaian.network.messages.*;
+import com.javakaian.util.EnemyData;
+import com.javakaian.util.EnemyFactory;
 import org.apache.log4j.Logger;
 
 import com.badlogic.gdx.math.Vector2;
@@ -21,7 +23,7 @@ import com.javakaian.network.messages.ShootMessage;
 
 import com.javakaian.shooter.shapes.Bullet;
 
-import com.javakaian.shooter.shapes.Enemy;
+//import com.javakaian.shooter.shapes.Enemy;
 import com.javakaian.shooter.shapes.HighDamageBullet;
 import com.javakaian.shooter.shapes.IBullet;
 import com.javakaian.shooter.shapes.Pistol;
@@ -29,6 +31,7 @@ import com.javakaian.shooter.shapes.MachineGun;
 import com.javakaian.shooter.shapes.BaseEnemy;
 import com.javakaian.shooter.shapes.BaseWeapon;
 import com.javakaian.shooter.shapes.Player;
+import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.shapes.RegularBullet;
 import com.javakaian.shooter.shapes.BulletDecorator;
 import com.javakaian.shooter.shapes.DamageDecorator;
@@ -101,23 +104,32 @@ public class ServerWorld implements OMessageListener {
 	 */
 	private void spawnRandomEnemy() {
 
-		if (enemyTime >= 0.4 && enemies.size() <= 15) {
+		if (enemyTime >= 0.4 && enemies.size() <= 30) {
 			enemyTime = 0;
 			if (enemies.size() % 5 == 0)
 				logger.debug("Number of enemies : " + enemies.size());
-			BaseEnemy e = new Enemy(new SecureRandom().nextInt(1000), new SecureRandom().nextInt(1000), 10);
-			
-			
-			//can implement factory here.
-			BaseEnemy b = e.clone();
-			
-			enemies.add(b);
+
+			float x = new SecureRandom().nextInt(1000);
+			float y = new SecureRandom().nextInt(1000);
+
+			BaseEnemy randomEnemy = EnemyFactory.createRandomEnemy(x,y);
+
+			BaseEnemy clonedEnemy = randomEnemy.clone();
+
+			EnemyData enemyData = new EnemyData(
+					clonedEnemy.getShape(),
+					clonedEnemy.getX(),
+					clonedEnemy.getY(),
+					clonedEnemy.getHealth()
+			);
+			oServer.sendToAllUDP(enemyData);
+			enemies.add(clonedEnemy);
 		}
 	}
 
 	private void broadcastScoreBoardUpdate(){
 		Map<String, Integer> currentScores = Scoreboard.getInstance().getScores();
-
+		
 		// Send the updated scores to all connected clients
 		oServer.sendToAllUDP(currentScores);
 	}
@@ -168,7 +180,6 @@ public class ServerWorld implements OMessageListener {
 									oServer.sendToAllUDP(scoreUpdate);
 
 								}); // Award score for killing another player
-
 					}
 
 				}
@@ -185,15 +196,11 @@ public class ServerWorld implements OMessageListener {
 
 		BaseWeapon weapon = new Pistol(new HighDamageBullet());
 
-		//players.add(new Player(m.getX(), m.getY(), 50, id, weapon));
-		//logger.debug("Login Message recieved from : " + id);
-
 		Player newPlayer = new Player(m.getX(), m.getY(), 50, id, "Player_"+id, weapon);
 		players.add(newPlayer);
 		logger.debug("Login Message received from : "+ newPlayer.getName());
 		Scoreboard.getInstance().addPlayer(newPlayer.getName());
 		Scoreboard.getInstance().updateScore(newPlayer.getName(), newPlayer.getScore());
-
 
 		m.setId(id);
 		oServer.sendToUDP(con.getID(), m);
@@ -203,13 +210,13 @@ public class ServerWorld implements OMessageListener {
 	public void logoutReceived(LogoutMessage m) {
 
 		players.stream().filter(p -> p.getId() == m.getId()).findFirst().ifPresent(p -> {
+			Scoreboard.getInstance().removePlayer(p.getId());
 			players.remove(p);
 			loginController.putUserIDBack(p.getId());
-			Scoreboard.getInstance().removePlayer(p.getId());
+
 			broadcastScoreBoardUpdate();
 		});
 		logger.debug("Logout Message recieved from : " + m.getId() + " Size: " + players.size());
-
 	}
 
 	@Override
@@ -234,9 +241,7 @@ public class ServerWorld implements OMessageListener {
 			default:
 				break;
 			}
-
 		});
-
 	}
 
 	private boolean shouldAddSpeedBoost(IBullet bullet) {
@@ -274,5 +279,4 @@ public class ServerWorld implements OMessageListener {
 					bullets.add(bullet);
 				});
 	}
-
 }

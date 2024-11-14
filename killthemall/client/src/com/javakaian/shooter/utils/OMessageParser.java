@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.javakaian.network.messages.GameWorldMessage;
+import com.javakaian.shooter.Strategy.DesaturationStrategy;
+import com.javakaian.shooter.Strategy.GradientStrategy;
+import com.javakaian.shooter.shapes.BaseEnemy;
 import com.javakaian.shooter.shapes.Bullet;
 import com.javakaian.shooter.shapes.Enemy;
 import com.javakaian.shooter.shapes.Player;
@@ -22,19 +25,17 @@ public class OMessageParser {
 	}
 
 	/** Returns a enemy list from gameworld message. */
-	public static List<Enemy> getEnemiesFromGWM(GameWorldMessage m) {
+	public static List<BaseEnemy> getEnemiesFromGWM(GameWorldMessage m) {
 
-		float[] temp = m.getEnemies();
-		List<Enemy> elist = new ArrayList<>();
-		for (int i = 0; i < temp.length / 2; i++) {
+		List<BaseEnemy> temp = m.getEnemies();
+		List<BaseEnemy> elist = new ArrayList<>();
+		for(BaseEnemy e : temp){
 
-			float x = temp[i * 2];
-			float y = temp[i * 2 + 1];
 
-			Enemy e = new Enemy(x, y, 10);
 			elist.add(e);
 
 		}
+
 		return elist;
 
 	}
@@ -54,7 +55,7 @@ public class OMessageParser {
 			float y = tp[i * 4 + 1];
 			float id = tp[i * 4 + 2];
 			float health = tp[i * 4 + 3];
-			Player p = new Player(x, y, 50, "Player_"+id);
+			Player p = new Player(x, y, 50, "Player_"+id, new DesaturationStrategy());
 			p.setHealth((int) health);
 			p.setId((int) id);
 
