@@ -24,6 +24,7 @@ public class GameWorldMessage {
 	private float[] players;
 	/** X,Y,Size of all the bullets.-> x1,y1,s1,x2,y2,s2,x3,y3,s3.. */
 	private float[] bullets;
+	private int mapColor;
 
 	public List<BaseEnemy> getEnemies() {
 		return enemies;
@@ -48,5 +49,12 @@ public class GameWorldMessage {
 	public void setBullets(float[] bullets) {
 		this.bullets = bullets;
 	}
+	public int getMapColor() {
+        return mapColor;
+    }
+
+    public void setMapColor(int mapColor) {
+        this.mapColor = mapColor;
+    }
 
 }

@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.javakaian.network.messages.*;
-import com.javakaian.util.EnemyData;
-import com.javakaian.util.EnemyFactory;
+import com.javakaian.util.*;
 import org.apache.log4j.Logger;
 
 import com.badlogic.gdx.math.Vector2;
@@ -55,13 +54,16 @@ public class ServerWorld implements OMessageListener {
 	private LoginController loginController;
 
 	private Logger logger = Logger.getLogger(ServerWorld.class);
-
+	private MapBuilder map;
+	private MapCon config;
+	private int MapColor = 1;
 	public ServerWorld() {
 
 		oServer = new OServer(this);
 		players = new ArrayList<>();
 		enemies = new ArrayList<>();
 		bullets = new ArrayList<>();
+		map = new NightMapBuilder();
 
 		loginController = new LoginController();
 
@@ -96,7 +98,7 @@ public class ServerWorld implements OMessageListener {
 
 		Scoreboard.getInstance().update(players);
 
-		GameWorldMessage m = MessageCreator.generateGWMMessage(enemies, bullets, players);
+		GameWorldMessage m = MessageCreator.generateGWMMessage(enemies, bullets, players ,MapColor);
 		oServer.sendToAllUDP(m);
 
 	}
@@ -115,7 +117,9 @@ public class ServerWorld implements OMessageListener {
 			float x = new SecureRandom().nextInt(1000);
 			float y = new SecureRandom().nextInt(1000);
 
-			BaseEnemy randomEnemy = EnemyFactory.createRandomEnemy(x,y);
+			config = map.setMapColor().setEnemyType(x,y).build();
+			BaseEnemy randomEnemy = config.getEnemy();
+			MapColor = config.getMapColor();
 
 			BaseEnemy clonedEnemy = randomEnemy.clone();
 
