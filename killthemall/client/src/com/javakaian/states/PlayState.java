@@ -219,6 +219,7 @@ public class PlayState extends State implements OMessageListener {
 		// Remove yourself from playerlist.
 		players.removeIf(p -> p.getId() == player.getId());
 
+
 	}
 
 	public void restart() {

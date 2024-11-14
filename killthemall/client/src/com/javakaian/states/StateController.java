@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.javakaian.network.OClient;
-import com.javakaian.shooter.utils.ScoreboardRenderer;
+import com.javakaian.shooter.shapes.Scoreboard;
 import com.javakaian.states.State.StateEnum;
 
 /**
@@ -28,16 +27,10 @@ public class StateController {
 	private State currentState;
 	/** Ip address of the server */
 	private String inetAddress;
-	ScoreboardRenderer renderer;
-
-
-
 	public StateController(String ip) {
 
 		this.inetAddress = ip;
 		stateMap = new HashMap<>();
-		this.renderer = new ScoreboardRenderer();
-
 	}
 
 	/**
@@ -71,15 +64,12 @@ public class StateController {
 
 	}
 
-
-
-
 	/**
 	 * Renders the current state.
 	 */
 	public void render() {
 
-		renderer.render();
+		Scoreboard.getInstance().render();
 		currentState.render();
 	}
 
@@ -87,10 +77,8 @@ public class StateController {
 	 * Updates the current state.
 	 */
 	public void update(float deltaTime) {
-		renderer.render();
+		Scoreboard.getInstance().render();
 		currentState.update(deltaTime);
-		renderer.updateFromScoreboard();
-
 
 	}
 
@@ -112,5 +100,4 @@ public class StateController {
 	public String getInetAddress() {
 		return inetAddress;
 	}
-
 }
