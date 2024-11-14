@@ -211,7 +211,7 @@ public class PlayState extends State implements OMessageListener {
 		bullets = OMessageParser.getBulletsFromGWM(m);
 
 		players = OMessageParser.getPlayersFromGWM(m);
-
+		mapColor = OMessageParser.getMapFromGWM(m);
 		if (player == null)
 			return;
 		// Find yourself.
