@@ -1,7 +1,11 @@
 package com.javakaian.shooter;
 
 
+import com.javakaian.shooter.shapes.Player;
+
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /// Singleton Klase Scoreboard kuri
@@ -17,6 +21,15 @@ public class Scoreboard {
     // Private constructor for Singleton pattern
     private Scoreboard() {
         playerScores = new HashMap<>();
+    }
+
+    public void update(List<Player> activePlayers) {
+
+        for (Player player : activePlayers) {
+            if(!player.isAlive()){
+                removePlayer(player.getId());
+            }
+        }
     }
 
     // Singleton access method
@@ -55,5 +68,6 @@ public class Scoreboard {
     public void removePlayer(int playerId) {
         String playerName = "Player_" + playerId;
         playerScores.remove(playerName);
+
     }
 }
