@@ -20,7 +20,6 @@ public abstract class BulletDecorator implements IBullet {
     public void setParameters(float x, float y, float size, float angle, int id) {
         wrappedBullet.setParameters(x, y, size, angle, id);
     }
-
     @Override
     public void update(float deltaTime) {
         wrappedBullet.update(deltaTime);
@@ -75,7 +74,6 @@ public abstract class BulletDecorator implements IBullet {
     public float getAngle() {
         return wrappedBullet.getAngle();
     }
-
     @Override
     public abstract IBullet clone();
 }

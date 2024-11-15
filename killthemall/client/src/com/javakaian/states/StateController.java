@@ -2,6 +2,7 @@ package com.javakaian.states;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.badlogic.gdx.graphics.Color;
 
 import com.badlogic.gdx.Gdx;
 import com.javakaian.shooter.shapes.Scoreboard;
@@ -27,6 +28,7 @@ public class StateController {
 	private State currentState;
 	/** Ip address of the server */
 	private String inetAddress;
+
 	public StateController(String ip) {
 
 		this.inetAddress = ip;
@@ -68,7 +70,6 @@ public class StateController {
 	 * Renders the current state.
 	 */
 	public void render() {
-
 		Scoreboard.getInstance().render();
 		currentState.render();
 	}
