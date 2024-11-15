@@ -3,7 +3,7 @@ package com.javakaian.states;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -46,7 +46,7 @@ public class PlayState extends State implements OMessageListener {
 	private AimLine aimLine;
 	private int mapColor;
 	private OClient myclient;
-
+	private List<Mine> mines;
 	private BitmapFont healthFont;
 
 	private SoundPlayer soundPlayer;
@@ -71,7 +71,7 @@ public class PlayState extends State implements OMessageListener {
 		players = new ArrayList<>();
 		enemies = new ArrayList<>();
 		bullets = new ArrayList<>();
-
+		mines = new ArrayList<>();
 		aimLine = new AimLine(new Vector2(0, 0), new Vector2(0, 0));
 		aimLine.setCamera(camera);
 
@@ -97,6 +97,7 @@ public class PlayState extends State implements OMessageListener {
 		sr.setColor(Color.WHITE);
 		enemies.forEach(e -> e.render(sr));
 		bullets.forEach(b -> b.render(sr));
+		mines.forEach((m -> m.render(sr)));
 		sr.setColor(Color.BLUE);
 		player.render(sr);
 		sr.setColor(Color.WHITE);
@@ -118,7 +119,15 @@ public class PlayState extends State implements OMessageListener {
 		camera.position.x += (player.getPosition().x - camera.position.x) * lerp;
 		camera.position.y += (player.getPosition().y - camera.position.y) * lerp;
 	}
-
+	private void initializeRandomMines(int count) {
+		Random random = new Random();
+	
+		for (int i = 0; i < count; i++) {
+			float x = random.nextInt(GameConstants.SCREEN_WIDTH); // Random x-coordinate
+			float y = random.nextInt(GameConstants.SCREEN_HEIGHT); // Random y-coordinate
+			Mine mine = new Mine(x, y, 20); // Create mine with random position and size 20
+			mines.add(mine);} // Add to the mines list
+		}	
 	@Override
 	public void update(float deltaTime) {
 		if (player == null)
