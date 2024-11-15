@@ -28,6 +28,8 @@ import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.utils.GameConstants;
 import com.javakaian.shooter.utils.GameUtils;
 import com.javakaian.shooter.utils.OMessageParser;
+import com.javakaian.shooter.shapes.ChangeAimLineBlueCommand;
+//import com.javakaian.states.ColorController;
 
 /**
  * This is the state where gameplay happens.
@@ -141,7 +143,6 @@ public class PlayState extends State implements OMessageListener {
 	 * the server with angle value.
 	 */
 	public void shoot() {
-
 		ShootMessage m = new ShootMessage();
 		m.setId(player.getId());
 		m.setAngleDeg(aimLine.getAngle());
@@ -154,12 +155,25 @@ public class PlayState extends State implements OMessageListener {
 	 * sends it to the server.
 	 */
 	private void processInputs() {
-
 		PositionMessage p = new PositionMessage();
 		p.setId(player.getId());
 		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) {
 			p.setDirection(DIRECTION.DOWN);
 			myclient.sendUDP(p);
+		}
+		if (Gdx.input.isKeyPressed(Keys.B)) {
+			ColorController cc = new ColorController(aimLine);
+			cc.changeColorBlue();
+		}
+
+		if (Gdx.input.isKeyPressed(Keys.G)) {
+			ColorController cc = new ColorController(aimLine);
+			cc.changeColorGreen();
+		}
+
+		if (Gdx.input.isKeyPressed(Keys.N)) {
+			ColorController cc = new ColorController(aimLine);
+			cc.undo();
 		}
 		if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
 			p.setDirection(DIRECTION.UP);

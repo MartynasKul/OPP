@@ -15,23 +15,18 @@ public class SpeedDecorator extends BulletDecorator {
 
         super.update(deltaTime);
 
-
         Vector2 position = wrappedBullet.getPosition();
 
         float angle = wrappedBullet.getAngle();
 
-
         double originalSpeed = deltaTime * 800;  // Base speed (can be adjusted)
         double adjustedSpeed = originalSpeed * speedMultiplier;
-
 
         position.x += Math.cos(angle) * adjustedSpeed;
         position.y -= Math.sin(angle) * adjustedSpeed;
 
-
         wrappedBullet.setPosition(position);
     }
-
     @Override
     public IBullet clone() {
         return new SpeedDecorator(wrappedBullet.clone(), speedMultiplier);
