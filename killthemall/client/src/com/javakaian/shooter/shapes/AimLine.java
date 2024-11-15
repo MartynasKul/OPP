@@ -13,25 +13,34 @@ public class AimLine {
 	private Vector2 begin;
 	private Vector2 end;
 
+	private Color color;
+
 	private OrthographicCamera camera;
 
 	private float angle = (float) (Math.PI / 2);
 
 	public AimLine(Vector2 begin, Vector2 end) {
-
+		this.color = Color.RED;
 		this.begin = begin;
 		this.end = end;
 	}
 
+	public void setColor(Color color){
+		this.color=color;
+	}
+
+	public Color getColor(){
+		return this.color;
+	}
+
 	public void render(ShapeRenderer sr) {
 
-		sr.setColor(Color.RED);
+		sr.setColor(color);
 		sr.line(begin, end);
 		sr.setColor(Color.WHITE);
 	}
 
 	public void update(float deltaTime) {
-
 		if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			Vector3 up = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 			end.x = up.x;
