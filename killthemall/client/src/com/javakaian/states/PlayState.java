@@ -74,7 +74,7 @@ public class PlayState extends State implements OMessageListener {
 		mines = new ArrayList<>();
 		aimLine = new AimLine(new Vector2(0, 0), new Vector2(0, 0));
 		aimLine.setCamera(camera);
-
+		initializeRandomMines(6);
 		LoginMessage m = new LoginMessage();
 		m.setX(new SecureRandom().nextInt(GameConstants.SCREEN_WIDTH));
 		m.setY(new SecureRandom().nextInt(GameConstants.SCREEN_HEIGHT));
