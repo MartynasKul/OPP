@@ -14,17 +14,10 @@ public class SpeedDecorator extends BulletDecorator {
     public void update(float deltaTime) {
 
         super.update(deltaTime);
-
-<<<<<<< HEAD
-
-=======
->>>>>>> Simas
         Vector2 position = wrappedBullet.getPosition();
 
         float angle = wrappedBullet.getAngle();
 
-<<<<<<< HEAD
-
         double originalSpeed = deltaTime * 800;  // Base speed (can be adjusted)
         double adjustedSpeed = originalSpeed * speedMultiplier;
 
@@ -35,17 +28,6 @@ public class SpeedDecorator extends BulletDecorator {
 
         wrappedBullet.setPosition(position);
     }
-
-=======
-        double originalSpeed = deltaTime * 800;  // Base speed (can be adjusted)
-        double adjustedSpeed = originalSpeed * speedMultiplier;
-
-        position.x += Math.cos(angle) * adjustedSpeed;
-        position.y -= Math.sin(angle) * adjustedSpeed;
-
-        wrappedBullet.setPosition(position);
-    }
->>>>>>> Simas
     @Override
     public IBullet clone() {
         return new SpeedDecorator(wrappedBullet.clone(), speedMultiplier);
