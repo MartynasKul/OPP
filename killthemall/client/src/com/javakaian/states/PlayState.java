@@ -3,6 +3,8 @@ package com.javakaian.states;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -28,6 +30,8 @@ import com.javakaian.shooter.shapes.*;
 import com.javakaian.shooter.utils.GameConstants;
 import com.javakaian.shooter.utils.GameUtils;
 import com.javakaian.shooter.utils.OMessageParser;
+import com.javakaian.shooter.shapes.ChangeAimLineBlueCommand;
+//import com.javakaian.states.ColorController;
 
 /**
  * This is the state where gameplay happens.
@@ -44,6 +48,7 @@ public class PlayState extends State implements OMessageListener {
 	private AimLine aimLine;
 	private int mapColor;
 	private OClient myclient;
+	private List<Mine> mines;
 
 	private BitmapFont healthFont;
 
@@ -69,10 +74,11 @@ public class PlayState extends State implements OMessageListener {
 		players = new ArrayList<>();
 		enemies = new ArrayList<>();
 		bullets = new ArrayList<>();
+		mines = new ArrayList<>();
 
 		aimLine = new AimLine(new Vector2(0, 0), new Vector2(0, 0));
 		aimLine.setCamera(camera);
-
+		initializeRandomMines(6);
 		LoginMessage m = new LoginMessage();
 		m.setX(new SecureRandom().nextInt(GameConstants.SCREEN_WIDTH));
 		m.setY(new SecureRandom().nextInt(GameConstants.SCREEN_HEIGHT));
@@ -95,6 +101,7 @@ public class PlayState extends State implements OMessageListener {
 		sr.setColor(Color.WHITE);
 		enemies.forEach(e -> e.render(sr));
 		bullets.forEach(b -> b.render(sr));
+		mines.forEach((m -> m.render(sr)));
 		sr.setColor(Color.BLUE);
 		player.render(sr);
 		sr.setColor(Color.WHITE);
@@ -116,6 +123,15 @@ public class PlayState extends State implements OMessageListener {
 		camera.position.x += (player.getPosition().x - camera.position.x) * lerp;
 		camera.position.y += (player.getPosition().y - camera.position.y) * lerp;
 	}
+	private void initializeRandomMines(int count) {
+		Random random = new Random();
+	
+		for (int i = 0; i < count; i++) {
+			float x = random.nextInt(GameConstants.SCREEN_WIDTH); // Random x-coordinate
+			float y = random.nextInt(GameConstants.SCREEN_HEIGHT); // Random y-coordinate
+			Mine mine = new Mine(x, y, 20); // Create mine with random position and size 20
+			mines.add(mine);} // Add to the mines list
+		}
 
 	@Override
 	public void update(float deltaTime) {
@@ -141,7 +157,6 @@ public class PlayState extends State implements OMessageListener {
 	 * the server with angle value.
 	 */
 	public void shoot() {
-
 		ShootMessage m = new ShootMessage();
 		m.setId(player.getId());
 		m.setAngleDeg(aimLine.getAngle());
@@ -154,12 +169,25 @@ public class PlayState extends State implements OMessageListener {
 	 * sends it to the server.
 	 */
 	private void processInputs() {
-
 		PositionMessage p = new PositionMessage();
 		p.setId(player.getId());
 		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) {
 			p.setDirection(DIRECTION.DOWN);
 			myclient.sendUDP(p);
+		}
+		if (Gdx.input.isKeyPressed(Keys.B)) {
+			ColorController cc = new ColorController(aimLine);
+			cc.changeColorBlue();
+		}
+
+		if (Gdx.input.isKeyPressed(Keys.G)) {
+			ColorController cc = new ColorController(aimLine);
+			cc.changeColorGreen();
+		}
+
+		if (Gdx.input.isKeyPressed(Keys.N)) {
+			ColorController cc = new ColorController(aimLine);
+			cc.undo();
 		}
 		if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
 			p.setDirection(DIRECTION.UP);
