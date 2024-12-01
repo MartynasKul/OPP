@@ -18,9 +18,6 @@ public abstract class BaseEnemy implements Cloneable{
         this.y = y;
         //this.boundRect = new Rectangle(x, y, size, size);
     }
-
-
-
     public BaseEnemy(float x, float y,  String shape, int health, int sizeX, int sizeY) {
         this.x = x;
         this.y = y;
@@ -47,47 +44,33 @@ public abstract class BaseEnemy implements Cloneable{
     protected abstract void move();
     protected abstract void attack();
     public abstract void render(ShapeRenderer renderer);
-
-
     public void setX(float x) {
         this.x = x;
     }
-
     public void setY(float y) {
         this.y = y;
     }
-
     public float getX() {
         return x;
     }
-
     public float getY() {
         return y;
     }
-
     public int getHealth() {
         return health;
     }
-
     public void setHealth(int health) {
         this.health = health;
     }
-
     public boolean isVisible() {
         return visible;
     }
-
     public String getShape() {
         return shape;
     }
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
-
-    //public Rectangle getBoundRect() {
-    //	return boundRect;
-    //}
-
     @Override
     public BaseEnemy clone() {
         try {
@@ -97,9 +80,6 @@ public abstract class BaseEnemy implements Cloneable{
             return null;
         }
     }
-
-
-
     public abstract void takeDamage(int damage);
     public abstract void applyEffect(Player player);
 }

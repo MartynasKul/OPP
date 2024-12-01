@@ -14,17 +14,14 @@ public final class EllipseEnemy extends BaseEnemy{
         super(x,y,"Ellipse", 2, 30,30);
         this.ellipse = new Ellipse(x,y, 30,20);
     }
-
     @Override
     public void takeDamage(int damage) {
         this.health -= damage*2;
     }
-
     @Override
     public void applyEffect(Player player){
         //sitas enemy tsg padaro
     }
-
     @Override
     public void render(ShapeRenderer sr) {
         sr.setColor(Color.CYAN);
@@ -33,12 +30,10 @@ public final class EllipseEnemy extends BaseEnemy{
         sr.rect(x,y, ellipse.height+2 ,ellipse.width+2);
         //System.out.printf("Ellipse enemy spawned at %a %b with %c health", x,y, health);
     }
-
     @Override
     protected void move() {
         System.out.println("The Ellipse Enemy is Ellipsing towards YOU!!");
     }
-
     @Override
     protected void attack() {
         System.out.println("The Ellipse enemy is attacking YOU");
