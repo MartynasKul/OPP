@@ -38,9 +38,12 @@ public class Scoreboard {
             synchronized (Scoreboard.class) {
                 if (instance == null) {
                     instance = new Scoreboard();
+                    System.out.println("Instance hash code: " + instance.hashCode());
+                    System.out.println("Made new instance");
                 }
             }
         }
+        //System.out.println("Returned instance");
         return instance;
     }
 

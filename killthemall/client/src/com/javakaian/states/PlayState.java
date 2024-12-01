@@ -3,11 +3,13 @@ package com.javakaian.states;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -25,10 +27,15 @@ import com.javakaian.shooter.Strategy.DesaturationStrategy;
 import com.javakaian.shooter.Strategy.GradientStrategy;
 import com.javakaian.shooter.input.PlayStateInput;
 import com.javakaian.shooter.shapes.*;
+import com.javakaian.shooter.shapes.ColorController;
+import com.javakaian.shooter.shapes.Iterator.GameEntityCollection;
+import com.javakaian.shooter.shapes.Iterator.GameIterator;
 import com.javakaian.shooter.utils.GameConstants;
 import com.javakaian.shooter.utils.GameUtils;
 import com.javakaian.shooter.utils.OMessageParser;
 import com.javakaian.shooter.shapes.ChangeAimLineBlueCommand;
+
+import static java.lang.Math.abs;
 //import com.javakaian.states.ColorController;
 
 /**
@@ -48,8 +55,9 @@ public class PlayState extends State implements OMessageListener {
 	private OClient myclient;
 	private List<Mine> mines;
 	private BitmapFont healthFont;
-
 	private SoundPlayer soundPlayer;
+	private GameEntityCollection collection;
+	private long lastUpdateTime = 0;
 
 	public PlayState(StateController sc) {
 		super(sc);
@@ -60,7 +68,7 @@ public class PlayState extends State implements OMessageListener {
 	}
 
 	private void init() {
-
+		collection = new GameEntityCollection();
 		ISoundPlayer soundAdapter = new SoundAdapter();
 		soundPlayer = new SoundPlayer();
 		soundPlayer.setPlayer(soundAdapter);
@@ -135,6 +143,24 @@ public class PlayState extends State implements OMessageListener {
 		aimLine.setBegin(player.getCenter());
 		aimLine.update(deltaTime);
 		processInputs();
+
+		enemies.stream()
+				.filter(Objects::nonNull)
+				.filter(e->abs(e.getX()-player.getPosition().x)<=30 &&
+						   abs(e.getY()-player.getPosition().y)<=30)
+				.forEach(e->{
+					e.performAction();
+					soundPlayer.playSound("client/assets/sounds/alert.wav");
+					}
+				);
+		//enemies.forEach(e-> e.performAction());
+		//for(BaseEnemy e :enemies) {
+		//	if(e!=null){
+		//		if(abs(e.getX()-player.getPosition().x) <= 2 && abs(e.getY()-player.getPosition().y) <= 2){
+		//			e.performAction();
+		//		}
+		//	}
+		//}
 	}
 
 	public void scrolled(float amountY) {
@@ -196,13 +222,17 @@ public class PlayState extends State implements OMessageListener {
 			p.setDirection(DIRECTION.RIGHT);
 			myclient.sendUDP(p);
 		}
+		if(Gdx.input.isKeyPressed(Keys.P)){
+			player.update();
+
+		}
 
 	}
 
 	@Override
 	public void loginReceieved(LoginMessage m) {
 
-		player = new Player(m.getX(), m.getY(), 50, "Player_", new DesaturationStrategy());
+		player = new Player(m.getX(), m.getY(), 50, "Player_", new GradientStrategy());
 		player.setId(m.getId());
 		player.setName("Player_"+player.getId());
 	}
@@ -229,11 +259,41 @@ public class PlayState extends State implements OMessageListener {
 
 	@Override
 	public void gwmReceived(GameWorldMessage m) {
+		long currentTime = System.currentTimeMillis();
 
 		enemies = OMessageParser.getEnemiesFromGWM(m);
 		bullets = OMessageParser.getBulletsFromGWM(m);
-
 		players = OMessageParser.getPlayersFromGWM(m);
+
+		if(currentTime-lastUpdateTime >=100000){
+			lastUpdateTime = currentTime;
+
+			for(BaseEnemy e : enemies){
+				collection.addEnemy(e);
+			}
+			for(Bullet b : bullets){
+				collection.addBullet(b);
+			}
+			for(Player p : players){
+				collection.addPlayer(p);
+			}
+			GameIterator<Player> playerIterator = collection.getPlayerIterator();
+			GameIterator<Bullet> bulletIterator = collection.getBulletIterator();
+			GameIterator<BaseEnemy> enemyIterator = collection.getEnemyIterator();
+			while(playerIterator.hasNext()){
+				Player p = playerIterator.next();
+				System.out.println("Player: " + p.getName());
+			}
+			while(bulletIterator.hasNext()){
+				Bullet b = bulletIterator.next();
+				System.out.println("Bullet positione: " + b.getPosition());
+			}
+			while(enemyIterator.hasNext()){
+				BaseEnemy e = enemyIterator.next();
+				System.out.println("Enemy " + e.getShape() + " in position" + e.getX() + " " + e.getY() );
+			}
+		}
+
 		mapColor = OMessageParser.getMapFromGWM(m);
 		if (player == null)
 			return;
@@ -241,7 +301,6 @@ public class PlayState extends State implements OMessageListener {
 		players.stream().filter(p -> p.getId() == player.getId()).findFirst().ifPresent(p -> player = p);
 		// Remove yourself from playerlist.
 		players.removeIf(p -> p.getId() == player.getId());
-
 
 	}
 
@@ -256,5 +315,4 @@ public class PlayState extends State implements OMessageListener {
 		m.setId(player.getId());
 		myclient.sendTCP(m);
 	}
-
 }

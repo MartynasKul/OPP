@@ -64,6 +64,7 @@ public class ServerWorld implements OMessageListener {
 		enemies = new ArrayList<>();
 		bullets = new ArrayList<>();
 		map = new NightMapBuilder();
+		map = new DesertMapBuilder();
 
 		loginController = new LoginController();
 
