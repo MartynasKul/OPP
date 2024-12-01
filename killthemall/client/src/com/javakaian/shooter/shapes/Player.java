@@ -2,12 +2,16 @@ package com.javakaian.shooter.shapes;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Color;
 import com.javakaian.shooter.Strategy.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 
@@ -20,7 +24,8 @@ public class Player {
 
 	private ColorStrategy colorStrategy;
 	private Color currentColor;
-
+	private List<ColorStrategy> strategies;
+	private int currentStrategyIndex;
 	private float blinkTimer = 0;
 	private boolean isRedVisible = true;
 
@@ -34,7 +39,16 @@ public class Player {
 		center = new Vector2(x, y);
 		this.name = name;
 		this.score=0;
+		this.currentStrategyIndex=0;
 		this.colorStrategy = colorStrategy;
+
+		strategies = new ArrayList<>();
+		strategies.add(new DesaturationStrategy());
+		strategies.add(new GradientStrategy());
+		strategies.add(new GreenYellowRedStrategy());
+		strategies.add(new OpacityStrategy());
+		strategies.add(new ThresholdShadeStrategy());
+		strategies.add(new FadeToBlackStrategy());
 		
 	}
 
@@ -43,6 +57,16 @@ public class Player {
 		this.colorStrategy = colorStrategy;
 	}
 
+	public void update() {
+
+		currentStrategyIndex++; // Cycle through strategies
+		if(currentStrategyIndex >= strategies.size()) {
+			currentStrategyIndex = 0;
+		}
+		//setColorStrategy(strategies.get(currentStrategyIndex));
+		this.colorStrategy = strategies.get(currentStrategyIndex);
+		System.out.println("Switched to strategy: " + colorStrategy.getClass().getSimpleName());
+	}
 	// Get the current color based on health using the assigned strategy
 	public String getColorBasedOnHealthString() {
 		return colorStrategy.applyColorString(health);

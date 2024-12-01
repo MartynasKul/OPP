@@ -19,7 +19,8 @@ public class NightMapBuilder implements MapBuilder {
 
     @Override
     public MapBuilder setEnemyType(float x, float y) {
-        this.enemy = EnemyFactory.createRandomEnemy("Square",x,y);
+        //this.enemy = EnemyFactory.createRandomEnemy(x,y);
+        this.enemy = EnemyFactory.createEnemy("Square",x,y);
         return this;
     }
     @Override

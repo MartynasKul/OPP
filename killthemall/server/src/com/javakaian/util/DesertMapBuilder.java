@@ -19,7 +19,8 @@ public class DesertMapBuilder implements MapBuilder {
 
     @Override
     public MapBuilder setEnemyType(float x, float y) {
-        this.enemy = EnemyFactory.createRandomEnemy("Circle",x,y);
+        //this.enemy = EnemyFactory.createRandomEnemy(x,y);
+        this.enemy = EnemyFactory.createEnemy("Circle",x,y);
         return this;
     }
     @Override

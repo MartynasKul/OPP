@@ -18,6 +18,9 @@ public abstract class BaseEnemy implements Cloneable{
         this.y = y;
         //this.boundRect = new Rectangle(x, y, size, size);
     }
+
+
+
     public BaseEnemy(float x, float y,  String shape, int health, int sizeX, int sizeY) {
         this.x = x;
         this.y = y;
@@ -35,6 +38,16 @@ public abstract class BaseEnemy implements Cloneable{
         this.boundRect.x = x;
         this.boundRect.y = y;
     }
+
+    public final void performAction() {
+        move();
+        attack();
+    }
+
+    protected abstract void move();
+    protected abstract void attack();
+    public abstract void render(ShapeRenderer renderer);
+
 
     public void setX(float x) {
         this.x = x;
@@ -85,9 +98,7 @@ public abstract class BaseEnemy implements Cloneable{
         }
     }
 
-   public void render(ShapeRenderer renderer) {
 
-   }
 
     public abstract void takeDamage(int damage);
     public abstract void applyEffect(Player player);

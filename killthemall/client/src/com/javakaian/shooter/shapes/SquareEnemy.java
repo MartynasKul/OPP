@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-public class SquareEnemy extends BaseEnemy{
+public final class SquareEnemy extends BaseEnemy{
 
-    protected Rectangle rectangle;
+    private Rectangle rectangle;
 
     public SquareEnemy(){}
 
@@ -30,7 +30,16 @@ public class SquareEnemy extends BaseEnemy{
         sr.rect(x, y, rectangle.width, rectangle.height);
         sr.setColor(Color.WHITE);
         sr.rect(x,y,rectangle.width+2,rectangle.height+2);
+       // System.out.printf("Square enemy spawned at %a %b with %c health", x,y, health);
+    }
 
+    @Override
+    protected void move() {
+        System.out.println("The Square Enemy is Squaring in on YOU!!");
+    }
 
+    @Override
+    protected void attack() {
+        System.out.println("The Square enemy is attacking YOU");
     }
 }

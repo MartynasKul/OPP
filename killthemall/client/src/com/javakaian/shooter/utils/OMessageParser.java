@@ -30,9 +30,8 @@ public class OMessageParser {
 		List<BaseEnemy> temp = m.getEnemies();
 		List<BaseEnemy> elist = new ArrayList<>();
 		for(BaseEnemy e : temp){
-
-
 			elist.add(e);
+
 
 		}
 
@@ -58,7 +57,7 @@ public class OMessageParser {
 			float y = tp[i * 4 + 1];
 			float id = tp[i * 4 + 2];
 			float health = tp[i * 4 + 3];
-			Player p = new Player(x, y, 50, "Player_"+id, new DesaturationStrategy());
+			Player p = new Player(x, y, 50, "Player_"+id, new GradientStrategy());
 			p.setHealth((int) health);
 			p.setId((int) id);
 

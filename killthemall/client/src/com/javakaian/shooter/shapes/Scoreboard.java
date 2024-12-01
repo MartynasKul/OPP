@@ -34,9 +34,12 @@ public class Scoreboard {
                 result = instance;
                 if (result == null) {
                     result = instance = new Scoreboard();
+                    System.out.println("Instance hash code: " + instance.hashCode());
+                    System.out.println("Made new instance");
                 }
             }
         }
+        //System.out.println("Returned instance" );
         return instance;
     }
 

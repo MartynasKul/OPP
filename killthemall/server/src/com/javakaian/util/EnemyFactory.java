@@ -36,4 +36,10 @@ public class EnemyFactory {
         String randomType = ENEMY_TYPES.get(new Random().nextInt(ENEMY_TYPES.size()));
         return createEnemy(enemy, x, y);
     }
+
+    // Method to create a random enemy
+    public static BaseEnemy createRandomEnemy( float x, float y) {
+        String randomType = ENEMY_TYPES.get(new Random().nextInt(ENEMY_TYPES.size()));
+        return createEnemy(randomType, x, y);
+    }
 }
