@@ -4,6 +4,9 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.javakaian.network.messages.*;
 import com.javakaian.util.*;
@@ -12,14 +15,6 @@ import org.apache.log4j.Logger;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.javakaian.network.OServer;
-
-import com.javakaian.network.messages.GameWorldMessage;
-import com.javakaian.network.messages.LoginMessage;
-import com.javakaian.network.messages.LogoutMessage;
-import com.javakaian.network.messages.PlayerDied;
-import com.javakaian.network.messages.PositionMessage;
-import com.javakaian.network.messages.ShootMessage;
-
 import com.javakaian.shooter.shapes.Bullet;
 
 //import com.javakaian.shooter.shapes.Enemy;
@@ -36,7 +31,7 @@ import com.javakaian.shooter.shapes.BulletDecorator;
 import com.javakaian.shooter.shapes.DamageDecorator;
 import com.javakaian.shooter.shapes.SpeedDecorator;
 import com.javakaian.shooter.shapes.PiercingDecorator;
-import com.javakaian.util.MessageCreator;
+
 import org.lwjgl.Sys;
 
 public class ServerWorld implements OMessageListener {
@@ -68,7 +63,29 @@ public class ServerWorld implements OMessageListener {
 
 		loginController = new LoginController();
 
+        // Start input listener in a separate thread
+        Thread inputThread = new Thread(() -> listenForCommands());
+        inputThread.start();
+
 	}
+
+	private void listenForCommands() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("listening for commands.");
+        while (true) {
+            String input = scanner.nextLine();
+            System.out.println(input);
+			try {
+				Command command = CommandParser.parse(input);
+				command.execute(oServer, enemies);
+	
+            } catch (Exception e) {
+                System.out.println(e);
+				break;
+            }
+        }
+        scanner.close();
+    }
 
 	public void update(float deltaTime) {
 
