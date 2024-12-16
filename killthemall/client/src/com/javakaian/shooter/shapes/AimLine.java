@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-public class AimLine {
+public class AimLine implements ClientGameEntity{
 
 	private Vector2 begin;
 	private Vector2 end;
@@ -32,7 +32,7 @@ public class AimLine {
 	public Color getColor(){
 		return this.color;
 	}
-
+	@Override
 	public void render(ShapeRenderer sr) {
 
 		sr.setColor(color);

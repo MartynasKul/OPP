@@ -3,7 +3,7 @@ package com.javakaian.shooter.shapes;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-public class Mine {
+public class Mine implements ClientGameEntity{
 
     private float x;
     private float y;
@@ -15,7 +15,7 @@ public class Mine {
         this.y = y;
         this.size = size;
     }
-
+    @Override
     public void render(ShapeRenderer sr) {
         if (!visible) return;
 
