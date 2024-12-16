@@ -1,9 +1,8 @@
 package com.javakaian.shooter.shapes;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-public abstract class BaseEnemy implements Cloneable{
+public abstract class BaseEnemy implements Cloneable, ClientGameEntity{
     protected float x;
     protected float y;
     protected int health;
@@ -43,7 +42,6 @@ public abstract class BaseEnemy implements Cloneable{
 
     protected abstract void move();
     protected abstract void attack();
-    public abstract void render(ShapeRenderer renderer);
     public void setX(float x) {
         this.x = x;
     }

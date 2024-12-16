@@ -58,6 +58,7 @@ public class PlayState extends State implements OMessageListener {
 	private SoundPlayer soundPlayer;
 	private GameEntityCollection collection;
 	private long lastUpdateTime = 0;
+	private ClientEntityGroup entityGroup;
 
 	public PlayState(StateController sc) {
 		super(sc);
@@ -68,6 +69,8 @@ public class PlayState extends State implements OMessageListener {
 	}
 
 	private void init() {
+
+		entityGroup = new ClientEntityGroup();
 		collection = new GameEntityCollection();
 		ISoundPlayer soundAdapter = new SoundAdapter();
 		soundPlayer = new SoundPlayer();
@@ -81,6 +84,8 @@ public class PlayState extends State implements OMessageListener {
 		bullets = new ArrayList<>();
 		mines = new ArrayList<>();
 		aimLine = new AimLine(new Vector2(0, 0), new Vector2(0, 0));
+		entityGroup.add(aimLine);
+		
 		aimLine.setCamera(camera);
 		initializeRandomMines(6);
 		LoginMessage m = new LoginMessage();
@@ -99,17 +104,20 @@ public class PlayState extends State implements OMessageListener {
 
 		ScreenUtils.clear(0, 0, 0, 1);
 
+
 		sr.begin(ShapeType.Line);
-		sr.setColor(Color.RED);
-		players.forEach(p -> p.render(sr));
-		sr.setColor(Color.WHITE);
-		enemies.forEach(e -> e.render(sr));
-		bullets.forEach(b -> b.render(sr));
-		mines.forEach((m -> m.render(sr)));
-		sr.setColor(Color.BLUE);
-		player.render(sr);
-		sr.setColor(Color.WHITE);
-		aimLine.render(sr);
+		entityGroup.render(sr);
+
+		//sr.setColor(Color.RED);
+		//players.forEach(p -> p.render(sr));
+		//sr.setColor(Color.WHITE);
+		//enemies.forEach(e -> e.render(sr));
+		//bullets.forEach(b -> b.render(sr));
+		//mines.forEach((m -> m.render(sr)));
+		//sr.setColor(Color.BLUE);
+		//player.render(sr);
+		//sr.setColor(Color.WHITE);
+		//aimLine.render(sr);
 		followPlayer();
 		sr.end();
 
@@ -134,8 +142,10 @@ public class PlayState extends State implements OMessageListener {
 			float x = random.nextInt(GameConstants.SCREEN_WIDTH); // Random x-coordinate
 			float y = random.nextInt(GameConstants.SCREEN_HEIGHT); // Random y-coordinate
 			Mine mine = new Mine(x, y, 20); // Create mine with random position and size 20
-			mines.add(mine);} // Add to the mines list
-		}	
+			mines.add(mine); // Add to the mines list
+			//entityGroup.add(mine);
+		}
+	}	
 	@Override
 	public void update(float deltaTime) {
 		if (player == null)
@@ -153,6 +163,8 @@ public class PlayState extends State implements OMessageListener {
 					soundPlayer.playSound("client/assets/sounds/alert.wav");
 					}
 				);
+
+
 		//enemies.forEach(e-> e.performAction());
 		//for(BaseEnemy e :enemies) {
 		//	if(e!=null){
@@ -234,7 +246,8 @@ public class PlayState extends State implements OMessageListener {
 
 		player = new Player(m.getX(), m.getY(), 50, "Player_", new GradientStrategy());
 		player.setId(m.getId());
-		player.setName("Player_"+player.getId());
+		player.setName("Player_"+player.getId());	
+		entityGroup.add(player);
 	}
 
 	@Override
@@ -265,7 +278,23 @@ public class PlayState extends State implements OMessageListener {
 		bullets = OMessageParser.getBulletsFromGWM(m);
 		players = OMessageParser.getPlayersFromGWM(m);
 
+		entityGroup.clear();
+		for(BaseEnemy e : enemies){
+			entityGroup.add(e);
+		}
+		for(Bullet b : bullets){
+			entityGroup.add(b);
+		}
+		for(Mine mine : mines){
+			entityGroup.add(mine);
+		}
+		for(Player p : players){
+			entityGroup.add(p);
+		}
+
+
 		if(currentTime-lastUpdateTime >=100000){
+			
 			lastUpdateTime = currentTime;
 
 			for(BaseEnemy e : enemies){

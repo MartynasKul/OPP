@@ -88,7 +88,7 @@ public class ServerWorld implements OMessageListener {
 		players.forEach(p -> p.setName());
 
 		checkCollision();
-
+		
 		// update object list. Remove necessary
 		players.removeIf(p -> !p.isAlive());
 		enemies.removeIf(e -> !e.isVisible());
@@ -100,6 +100,9 @@ public class ServerWorld implements OMessageListener {
 		Scoreboard.getInstance().update(players);
 
 		GameWorldMessage m = MessageCreator.generateGWMMessage(enemies, bullets, players ,MapColor);
+
+		
+
 		oServer.sendToAllUDP(m);
 
 	}

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 
-public final class CircleEnemy extends BaseEnemy{
+public final class CircleEnemy extends BaseEnemy implements ClientGameEntity{
     private Circle circle;
 
     public CircleEnemy(){}

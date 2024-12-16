@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 /// cia galima prototype panaudoti kuriant naujus ammo type
 /// base klase butu ammo
 /// sekancios: bullet, rocket, bolt, laser, hook
-public class Bullet {
+public class Bullet implements ClientGameEntity{
 
 	private Vector2 position;
 	private float size;
@@ -16,7 +16,7 @@ public class Bullet {
 		this.position = new Vector2(x, y);
 		this.size = size;
 	}
-
+	@Override
 	public void render(ShapeRenderer sr) {
 		sr.rect(position.x, position.y, size, size);
 	}

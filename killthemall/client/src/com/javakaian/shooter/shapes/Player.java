@@ -13,7 +13,7 @@ import com.javakaian.shooter.Strategy.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class Player implements ClientGameEntity{
 
 	private float size;
 	private Vector2 position;
@@ -74,7 +74,7 @@ public class Player {
 	public Color getColorBasedOnHealth(){
 		return colorStrategy.applyColor(health);
 	}
-
+	@Override
 	public void render(ShapeRenderer sr) {
 
 		Color currentColor = colorStrategy.applyColor(health);

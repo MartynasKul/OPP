@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Ellipse;
 import com.sun.org.apache.bcel.internal.generic.DCONST;
 
-public final class EllipseEnemy extends BaseEnemy{
+public final class EllipseEnemy extends BaseEnemy implements ClientGameEntity{
     private Ellipse ellipse;
 
     public EllipseEnemy(){}
@@ -22,14 +22,7 @@ public final class EllipseEnemy extends BaseEnemy{
     public void applyEffect(Player player){
         //sitas enemy tsg padaro
     }
-    @Override
-    public void render(ShapeRenderer sr) {
-        sr.setColor(Color.CYAN);
-        sr.ellipse(x, y, ellipse.width, ellipse.height);
-        sr.setColor(Color.WHITE);
-        sr.rect(x,y, ellipse.height+2 ,ellipse.width+2);
-        //System.out.printf("Ellipse enemy spawned at %a %b with %c health", x,y, health);
-    }
+    
     @Override
     protected void move() {
         System.out.println("The Ellipse Enemy is Ellipsing towards YOU!!");
@@ -37,5 +30,14 @@ public final class EllipseEnemy extends BaseEnemy{
     @Override
     protected void attack() {
         System.out.println("The Ellipse enemy is attacking YOU");
+    }
+
+    @Override
+    public void render(ShapeRenderer sr) {
+        sr.setColor(Color.CYAN);
+        sr.ellipse(x, y, ellipse.width, ellipse.height);
+        sr.setColor(Color.WHITE);
+        sr.rect(x,y, ellipse.height+2 ,ellipse.width+2);
+        //System.out.printf("Ellipse enemy spawned at %a %b with %c health", x,y, health);
     }
 }

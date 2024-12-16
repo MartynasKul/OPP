@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 ///
 ///
 /// Strategy dp galima pritaikyti enemy. galima prideti judejima, saudya, roaminima.
-public class Enemy {
+public class Enemy implements ClientGameEntity{
 
 	private float x;
 	private float y;
@@ -22,7 +22,7 @@ public class Enemy {
 		this.size = size;
 
 	}
-
+	@Override
 	public void render(ShapeRenderer sr) {
 
 		sr.setColor(Color.CYAN);
