@@ -87,4 +87,8 @@ public class OMessageParser {
 		return blist;
 	}
 
+	public static float[] getCollisionCoordsFromGwm(GameWorldMessage m) {
+		return m.getCollisionCoords();
+	}
+
 }

@@ -27,13 +27,11 @@ import com.javakaian.shooter.Strategy.DesaturationStrategy;
 import com.javakaian.shooter.Strategy.GradientStrategy;
 import com.javakaian.shooter.input.PlayStateInput;
 import com.javakaian.shooter.shapes.*;
-import com.javakaian.shooter.shapes.ColorController;
 import com.javakaian.shooter.shapes.Iterator.GameEntityCollection;
 import com.javakaian.shooter.shapes.Iterator.GameIterator;
 import com.javakaian.shooter.utils.GameConstants;
 import com.javakaian.shooter.utils.GameUtils;
 import com.javakaian.shooter.utils.OMessageParser;
-import com.javakaian.shooter.shapes.ChangeAimLineBlueCommand;
 
 import static java.lang.Math.abs;
 //import com.javakaian.states.ColorController;
@@ -59,6 +57,9 @@ public class PlayState extends State implements OMessageListener {
 	private GameEntityCollection collection;
 	private long lastUpdateTime = 0;
 	private ClientEntityGroup entityGroup;
+	private float[] collisionCoords;
+	private ParticleManager particleManager;
+
 
 	public PlayState(StateController sc) {
 		super(sc);
@@ -70,6 +71,9 @@ public class PlayState extends State implements OMessageListener {
 
 	private void init() {
 
+        particleManager = new ParticleManager("circle");
+
+		collisionCoords = new float[2];
 		entityGroup = new ClientEntityGroup();
 		collection = new GameEntityCollection();
 		ISoundPlayer soundAdapter = new SoundAdapter();
@@ -104,8 +108,8 @@ public class PlayState extends State implements OMessageListener {
 
 		ScreenUtils.clear(0, 0, 0, 1);
 
-
 		sr.begin(ShapeType.Line);
+		particleManager.render(sr);
 		entityGroup.render(sr);
 
 		//sr.setColor(Color.RED);
@@ -152,6 +156,8 @@ public class PlayState extends State implements OMessageListener {
 			return;
 		aimLine.setBegin(player.getCenter());
 		aimLine.update(deltaTime);
+		particleManager.update(deltaTime);
+		
 		processInputs();
 
 		enemies.stream()
@@ -273,10 +279,18 @@ public class PlayState extends State implements OMessageListener {
 	@Override
 	public void gwmReceived(GameWorldMessage m) {
 		long currentTime = System.currentTimeMillis();
-
 		enemies = OMessageParser.getEnemiesFromGWM(m);
 		bullets = OMessageParser.getBulletsFromGWM(m);
 		players = OMessageParser.getPlayersFromGWM(m);
+		collisionCoords = OMessageParser.getCollisionCoordsFromGwm(m);
+
+		if (collisionCoords[0] != 0.0 && collisionCoords[1] != 0.0)
+		{
+			particleManager.spawnParticle(collisionCoords[0], collisionCoords[1], 1);
+
+			collisionCoords[0] = 0.0f;
+			collisionCoords[1] = 0.0f;
+		}
 
 		entityGroup.clear();
 		for(BaseEnemy e : enemies){
@@ -291,7 +305,6 @@ public class PlayState extends State implements OMessageListener {
 		for(Player p : players){
 			entityGroup.add(p);
 		}
-
 
 		if(currentTime-lastUpdateTime >=100000){
 			
