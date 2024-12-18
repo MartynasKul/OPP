@@ -25,6 +25,7 @@ public class GameWorldMessage {
 	/** X,Y,Size of all the bullets.-> x1,y1,s1,x2,y2,s2,x3,y3,s3.. */
 	private float[] bullets;
 	private int mapColor;
+	private float[] collisionCoords;
 
 	public List<BaseEnemy> getEnemies() {
 		return enemies;
@@ -37,6 +38,10 @@ public class GameWorldMessage {
 	public float[] getBullets() {
 		return bullets;
 	}
+
+	public float[] getCollisionCoords() {
+        return collisionCoords;
+    }
 
 	public void setEnemies(List<BaseEnemy> newEnemies) {
         this.enemies.addAll(newEnemies);
@@ -54,8 +59,12 @@ public class GameWorldMessage {
         return mapColor;
     }
 
-    	public void setMapColor(int mapColor) {
+    public void setMapColor(int mapColor) {
         this.mapColor = mapColor;
+    }
+
+	public void setCollisionCoords(float[] coords) {
+        this.collisionCoords = coords;
     }
 
 }

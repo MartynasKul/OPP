@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import com.javakaian.network.messages.*;
 import com.javakaian.util.*;
@@ -15,24 +13,17 @@ import org.apache.log4j.Logger;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.javakaian.network.OServer;
-import com.javakaian.shooter.shapes.Bullet;
 
 //import com.javakaian.shooter.shapes.Enemy;
 import com.javakaian.shooter.shapes.HighDamageBullet;
 import com.javakaian.shooter.shapes.IBullet;
 import com.javakaian.shooter.shapes.Pistol;
-import com.javakaian.shooter.shapes.MachineGun;
 import com.javakaian.shooter.shapes.BaseEnemy;
 import com.javakaian.shooter.shapes.BaseWeapon;
 import com.javakaian.shooter.shapes.Player;
-import com.javakaian.shooter.shapes.*;
-import com.javakaian.shooter.shapes.RegularBullet;
-import com.javakaian.shooter.shapes.BulletDecorator;
-import com.javakaian.shooter.shapes.DamageDecorator;
 import com.javakaian.shooter.shapes.SpeedDecorator;
 import com.javakaian.shooter.shapes.PiercingDecorator;
 
-import org.lwjgl.Sys;
 
 public class ServerWorld implements OMessageListener {
 
@@ -52,6 +43,9 @@ public class ServerWorld implements OMessageListener {
 	private MapBuilder map;
 	private MapCon config;
 	private int MapColor = 1;
+
+	private float[] collisionCoords;
+
 	public ServerWorld() {
 
 		oServer = new OServer(this);
@@ -60,7 +54,7 @@ public class ServerWorld implements OMessageListener {
 		bullets = new ArrayList<>();
 		map = new NightMapBuilder();
 		map = new DesertMapBuilder();
-
+		collisionCoords = new float[2];
 		loginController = new LoginController();
 
         // Start input listener in a separate thread
@@ -116,7 +110,7 @@ public class ServerWorld implements OMessageListener {
 
 		Scoreboard.getInstance().update(players);
 
-		GameWorldMessage m = MessageCreator.generateGWMMessage(enemies, bullets, players ,MapColor);
+		GameWorldMessage m = MessageCreator.generateGWMMessage(enemies, bullets, players, MapColor, collisionCoords);
 
 		
 
@@ -172,6 +166,10 @@ public class ServerWorld implements OMessageListener {
 					if(b.getPiercing()){ b.setVisible(true);}
 					else{b.setVisible(false);}
 					e.setVisible(false);
+
+					collisionCoords[0] = e.getX();
+					collisionCoords[1] = e.getY();
+
 					players.stream()
 							.filter(p -> p.getId() == b.getId())
 							.findFirst()
@@ -190,6 +188,10 @@ public class ServerWorld implements OMessageListener {
 					if(b.getPiercing()){ b.setVisible(true);}
 					else{b.setVisible(false);}
 					p.hit();
+
+					collisionCoords[0] = p.getPosition().x;
+					collisionCoords[1] = p.getPosition().y;
+					
 					if (!p.isAlive()) {
 						// Notify all clients that the player died
 						PlayerDied m = new PlayerDied();
