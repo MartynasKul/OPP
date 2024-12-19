@@ -7,12 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.javakaian.shooter.input.MenuStateInput;
 import com.javakaian.shooter.utils.GameUtils;
 
-/**
- * 
- * 
- * @author oguz
- *
- */
+
 public class MenuState extends State {
 
 	private BitmapFont smallFont;
