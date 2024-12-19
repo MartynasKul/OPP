@@ -8,4 +8,6 @@ public abstract class BaseWeapon {
     }
 
     abstract public IBullet getBullet(float x, float y, float size, float angle, int id);
+
+    abstract public void bulletShot();
 }

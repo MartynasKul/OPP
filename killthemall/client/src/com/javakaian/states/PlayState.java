@@ -357,4 +357,7 @@ public class PlayState extends State implements OMessageListener {
 		m.setId(player.getId());
 		myclient.sendTCP(m);
 	}
+
+	@Override
+	protected void writeState(){System.out.println("You are in Play State");}
 }

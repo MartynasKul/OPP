@@ -82,6 +82,14 @@ public abstract class State {
 		return sc;
 	}
 
+	protected abstract void writeState();
+
+	// Template method
+	public void templmet() {
+		writeState();
+	}
+
+
 	/** Enum for each state */
 	public enum StateEnum {
 

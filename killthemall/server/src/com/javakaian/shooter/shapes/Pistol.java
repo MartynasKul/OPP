@@ -11,5 +11,6 @@ public class Pistol extends BaseWeapon{
         bullet.setParameters(x, y, size, angle, id);
         return bullet;
     }
-    
+    @Override
+    public void bulletShot(){};
 }

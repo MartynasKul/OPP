@@ -49,7 +49,7 @@ public class Player implements ClientGameEntity{
 		strategies.add(new OpacityStrategy());
 		strategies.add(new ThresholdShadeStrategy());
 		strategies.add(new FadeToBlackStrategy());
-		
+
 	}
 
 	// Method to set a different color strategy at runtime if desired

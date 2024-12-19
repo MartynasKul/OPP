@@ -53,5 +53,7 @@ public class GameOverState extends State {
 		PlayState playState = (PlayState) this.sc.getStateMap().get(StateEnum.PLAY_STATE.ordinal());
 		playState.restart();
 	}
+	@Override
+	protected void writeState(){System.out.println("You are in Game Over State");}
 
 }
