@@ -33,6 +33,10 @@ public final class CircleEnemy extends BaseEnemy implements ClientGameEntity{
     @Override
     protected void move() {
         System.out.println("The Circle Enemy is Circling around YOU!!");
+        setX(getX()+10);
+        setY( getY()-20);
+
+        // pajuda diagonaliai i desine/zemyn
     }
     @Override
     protected void attack() {

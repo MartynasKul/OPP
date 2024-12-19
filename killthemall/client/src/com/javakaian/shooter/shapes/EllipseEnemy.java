@@ -26,10 +26,15 @@ public final class EllipseEnemy extends BaseEnemy implements ClientGameEntity{
     @Override
     protected void move() {
         System.out.println("The Ellipse Enemy is Ellipsing towards YOU!!");
+        setX(getX()+5);
+        setY(getY()+5);
+
+        //Pajuda diagonaliai i desine/aukstyn
     }
     @Override
     protected void attack() {
         System.out.println("The Ellipse enemy is attacking YOU");
+
     }
 
     @Override
