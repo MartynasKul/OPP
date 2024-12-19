@@ -55,7 +55,15 @@ public class StateController {
 			case MENU_STATE:
 				currentState = new MenuState(this);
 				break;
-
+			case DISCONNECTED_STATE:
+				currentState = new DisconnectedState(this);
+				break;
+			case HELP_STATE:
+				currentState = new HelpState(this);
+				break;
+			case PAUSE_STATE:
+				currentState = new PauseState(this);
+				break;
 			default:
 				currentState = new MenuState(this);
 				break;
