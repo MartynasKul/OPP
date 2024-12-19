@@ -17,8 +17,7 @@ import com.javakaian.states.State.StateEnum;
  * which is not already in that hashmap, it creates that state and puts it to
  * the hashmap.
  * 
- * @author oguz
- * 
+
  */
 public class StateController {
 

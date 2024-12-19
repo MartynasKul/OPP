@@ -40,8 +40,7 @@ import static java.lang.Math.abs;
 /**
  * This is the state where gameplay happens.
  * 
- * @author oguz
- *
+
  */
 public class PlayState extends State implements OMessageListener {
 

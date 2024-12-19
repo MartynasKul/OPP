@@ -8,12 +8,6 @@ import com.javakaian.shooter.input.MenuStateInput;
 import com.javakaian.shooter.input.PauseStateInput;
 import com.javakaian.shooter.utils.GameUtils;
 
-/**
- *
- *
- * @author oguz
- *
- */
 public class PauseState extends State {
 
     private BitmapFont smallFont;

@@ -7,8 +7,7 @@ import com.javakaian.states.State.StateEnum;
 /**
  * Input Handles of MenuState
  * 
- * @author oguz
- *
+
  */
 public class MenuStateInput extends InputAdapter {
 

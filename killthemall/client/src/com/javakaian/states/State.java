@@ -20,8 +20,7 @@ import com.javakaian.shooter.utils.GameUtils;
  * 
  * Each state will have their own input
  * processor,shaperenderer,spritebatch,camera and also font.
- * 
- * @author oguz
+
  *
  */
 public abstract class State {
