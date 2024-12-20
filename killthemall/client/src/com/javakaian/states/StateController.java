@@ -56,7 +56,7 @@ public class StateController {
 				break;
 			case MENU_STATE:
 				currentState = new MenuState(this);
-				currentState.writeState();
+				currentState.templmet();
 				break;
 
 			default:
