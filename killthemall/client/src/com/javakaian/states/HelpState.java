@@ -43,4 +43,6 @@ public class HelpState extends State {
     public void dispose() {
         smallFont.dispose();
     }
+    @Override
+    protected void writeState(){System.out.println("You are in Help State");}
 }

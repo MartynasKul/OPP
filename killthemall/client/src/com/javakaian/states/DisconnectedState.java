@@ -40,4 +40,7 @@ public class DisconnectedState extends State {
     public void reconnect() {
         this.sc.setState(StateEnum.PLAY_STATE);
     }
+
+    @Override
+    protected void writeState(){System.out.println("You are in Disconnected State");}
 }
