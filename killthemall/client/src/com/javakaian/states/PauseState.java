@@ -58,4 +58,7 @@ public class PauseState extends State {
 
     }
 
+    @Override
+    protected void writeState(){System.out.println("You are in Pause State");}
+
 }

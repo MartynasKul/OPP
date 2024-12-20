@@ -47,27 +47,31 @@ public class StateController {
 			switch (stateEnum) {
 			case PLAY_STATE:
 				currentState = new PlayState(this);
-				currentState.writeState();
+				currentState.templmet();
 				break;
 			case GAME_OVER_STATE:
 				currentState = new GameOverState(this);
-				currentState.writeState();
+				currentState.templmet();
 				break;
 			case MENU_STATE:
 				currentState = new MenuState(this);
-				currentState.writeState();
+				currentState.templmet();
 				break;
 			case DISCONNECTED_STATE:
 				currentState = new DisconnectedState(this);
+				currentState.templmet();
 				break;
 			case HELP_STATE:
 				currentState = new HelpState(this);
+				currentState.templmet();
 				break;
 			case PAUSE_STATE:
 				currentState = new PauseState(this);
+				currentState.templmet();
 				break;
 			default:
 				currentState = new MenuState(this);
+				currentState.templmet();
 				currentState.writeState();
 				break;
 			}
