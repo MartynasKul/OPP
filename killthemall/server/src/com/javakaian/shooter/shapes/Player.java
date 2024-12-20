@@ -17,17 +17,14 @@ public class Player {
 
 	private BaseWeapon weapon;
 
-
-
 	public Player(float x, float y, float size, int id, String name, BaseWeapon weapon) {
-
 		this.position = new Vector2(x, y);
 		this.size = size;
 		this.id = id;
 		this.boundRect = new Rectangle(x, y, this.size, this.size);
 		this.alive = true;
 		this.health = 100;
-		this.weapon = weapon;
+		this.weapon = new WeaponSecurityProxy(weapon, this); // Proxy is used here
 		this.score = 0;
 	}
 
@@ -37,31 +34,30 @@ public class Player {
 		bullet.setParameters(getPosition().x + getBoundRect().width / 2,
 				getPosition().y + getBoundRect().height / 2, 10, pp.getAngleDeg(), pp.getId());
 
+		weapon.bulletShot();
+
 		return bullet;
 	}
-
 
 	boolean someConditionForHighDamage = false;
 	public void update(float deltaTime) {
 
-		if(this.health <= 50){
+		// Check health condition for high-damage bullet
+		if (this.health <= 50) {
 			someConditionForHighDamage = true;
-		}
-		else{
+		} else {
 			someConditionForHighDamage = false;
 		}
 
-
-
 		IBullet bullet = weapon.bullet.clone();
 
-
+		// Update weapon bullet type based on health
 		if (someConditionForHighDamage) {
-			this.weapon.bullet = new DamageDecorator(bullet, 40);
+			this.weapon.bullet = new DamageDecorator(bullet, 40); // Apply damage decorator if health is low
+		} else {
+			this.weapon.bullet = new HighDamageBullet(); // Use default high damage bullet
 		}
-		else{
-			this.weapon.bullet = new HighDamageBullet();
-		}
+
 		this.boundRect.x = position.x;
 		this.boundRect.y = position.y;
 	}
@@ -124,9 +120,8 @@ public class Player {
 	public void setName() {
 		this.name = "Player " + this.id;
 	}
-
 	public void increaseScore(int points) {
-		this.score+=points;
+		this.score += points;
 	}
 
 	public int getScore() {

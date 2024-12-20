@@ -47,12 +47,15 @@ public class StateController {
 			switch (stateEnum) {
 			case PLAY_STATE:
 				currentState = new PlayState(this);
+				currentState.writeState();
 				break;
 			case GAME_OVER_STATE:
 				currentState = new GameOverState(this);
+				currentState.writeState();
 				break;
 			case MENU_STATE:
 				currentState = new MenuState(this);
+				currentState.writeState();
 				break;
 			case DISCONNECTED_STATE:
 				currentState = new DisconnectedState(this);
@@ -65,6 +68,7 @@ public class StateController {
 				break;
 			default:
 				currentState = new MenuState(this);
+				currentState.writeState();
 				break;
 			}
 			stateMap.put(stateEnum.ordinal(), currentState);

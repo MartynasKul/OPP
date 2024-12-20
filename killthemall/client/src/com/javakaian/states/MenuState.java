@@ -58,4 +58,7 @@ public class MenuState extends State {
 
 	}
 
+	@Override
+	protected void writeState(){System.out.println("You are in Menu State");}
+
 }

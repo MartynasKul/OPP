@@ -19,10 +19,8 @@ public class SpeedDecorator extends BulletDecorator {
         float angle = wrappedBullet.getAngle();
         double originalSpeed = deltaTime * 800;  // Base speed (can be adjusted)
         double adjustedSpeed = originalSpeed * speedMultiplier;
-
         position.x += Math.cos(angle) * adjustedSpeed;
         position.y -= Math.sin(angle) * adjustedSpeed;
-
         wrappedBullet.setPosition(position);
     }
     @Override
