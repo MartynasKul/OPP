@@ -7,8 +7,6 @@ import com.javakaian.states.State.StateEnum;
 
 /**
  * Input handles of Game Over State.
- * 
- * @author oguz
  *
  */
 public class GameOverInput extends InputAdapter {

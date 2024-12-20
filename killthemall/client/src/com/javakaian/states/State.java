@@ -20,8 +20,7 @@ import com.javakaian.shooter.utils.GameUtils;
  * 
  * Each state will have their own input
  * processor,shaperenderer,spritebatch,camera and also font.
- * 
- * @author oguz
+
  *
  */
 public abstract class State {
@@ -92,8 +91,12 @@ public abstract class State {
 
 	/** Enum for each state */
 	public enum StateEnum {
-
-		PLAY_STATE, MENU_STATE, GAME_OVER_STATE, PAUSE_STATE
+		PLAY_STATE,
+		MENU_STATE,
+		GAME_OVER_STATE,
+		PAUSE_STATE,
+		DISCONNECTED_STATE,
+		HELP_STATE
 
 	}
 

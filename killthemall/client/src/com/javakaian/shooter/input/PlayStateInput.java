@@ -8,8 +8,7 @@ import com.javakaian.states.State.StateEnum;
 /**
  * Input handles of PlayState
  * 
- * @author oguz
- *
+
  */
 public class PlayStateInput extends InputAdapter {
 

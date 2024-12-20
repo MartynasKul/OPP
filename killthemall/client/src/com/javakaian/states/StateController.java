@@ -17,8 +17,7 @@ import com.javakaian.states.State.StateEnum;
  * which is not already in that hashmap, it creates that state and puts it to
  * the hashmap.
  * 
- * @author oguz
- * 
+
  */
 public class StateController {
 
@@ -58,7 +57,15 @@ public class StateController {
 				currentState = new MenuState(this);
 				currentState.templmet();
 				break;
-
+			case DISCONNECTED_STATE:
+				currentState = new DisconnectedState(this);
+				break;
+			case HELP_STATE:
+				currentState = new HelpState(this);
+				break;
+			case PAUSE_STATE:
+				currentState = new PauseState(this);
+				break;
 			default:
 				currentState = new MenuState(this);
 				currentState.writeState();

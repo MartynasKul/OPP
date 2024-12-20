@@ -11,8 +11,7 @@ import com.javakaian.shooter.utils.GameUtils;
  * 
  * This class controls game over state.
  * 
- * @author oguz
- *
+
  */
 public class GameOverState extends State {
 

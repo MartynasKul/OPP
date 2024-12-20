@@ -27,6 +27,7 @@ import com.javakaian.shooter.Strategy.DesaturationStrategy;
 import com.javakaian.shooter.Strategy.GradientStrategy;
 import com.javakaian.shooter.input.PlayStateInput;
 import com.javakaian.shooter.shapes.*;
+import com.javakaian.shooter.shapes.ColorController;
 import com.javakaian.shooter.shapes.Iterator.GameEntityCollection;
 import com.javakaian.shooter.shapes.Iterator.GameIterator;
 import com.javakaian.shooter.utils.GameConstants;
@@ -39,8 +40,7 @@ import static java.lang.Math.abs;
 /**
  * This is the state where gameplay happens.
  * 
- * @author oguz
- *
+
  */
 public class PlayState extends State implements OMessageListener {
 
@@ -129,6 +129,7 @@ public class PlayState extends State implements OMessageListener {
 		GameUtils.renderCenter("HEALTH: " + player.getHealth(), sb, healthFont, 0.1f);
 		sb.end();
 
+		//render enemies based on closeness to the player( if enemy close to player = > render
 	}
 
 	/**
@@ -240,9 +241,14 @@ public class PlayState extends State implements OMessageListener {
 			p.setDirection(DIRECTION.RIGHT);
 			myclient.sendUDP(p);
 		}
-		if(Gdx.input.isKeyPressed(Keys.P)){
+		if(Gdx.input.isKeyJustPressed(Keys.P)){
 			player.update();
-
+		}
+		if(Gdx.input.isKeyPressed(Keys.O)){
+			this.getSc().setState(StateEnum.PAUSE_STATE);
+		}
+		if(Gdx.input.isKeyPressed(Keys.H)){
+			this.getSc().setState(StateEnum.HELP_STATE);
 		}
 
 	}
@@ -260,6 +266,7 @@ public class PlayState extends State implements OMessageListener {
 	public void logoutReceieved(LogoutMessage m) {
 		// do the logout proccess here
 		Scoreboard.getInstance().removePlayer(player.getId());
+		this.getSc().setState(StateEnum.DISCONNECTED_STATE);
 	}
 
 	@Override

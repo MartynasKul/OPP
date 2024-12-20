@@ -36,6 +36,10 @@ public final class SquareEnemy extends BaseEnemy implements ClientGameEntity{
     @Override
     protected void move() {
         System.out.println("The Square Enemy is Squaring in on YOU!!");
+        setX(getX()-5);
+        setY(getY()-5);
+
+        //pajuda diagonaliai i kaire/apacia
     }
 
     @Override
